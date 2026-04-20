@@ -12,6 +12,7 @@ export default function Home() {
   const fileRef = useRef<HTMLInputElement>(null)
   const imgRef = useRef<HTMLImageElement>(null)
   const [screenStyle, setScreenStyle] = useState({top:0,left:0,width:0,height:0})
+  const [amzStyle, setAmzStyle] = useState({top:0,left:0,width:0,height:0})
 
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -23,7 +24,15 @@ export default function Home() {
   const SCREEN_X1 = 476
   const SCREEN_Y1 = 115
   const SCREEN_X2 = 834
+  const AMZ_X1 = 925
+  const AMZ_Y1 = 117
+  const AMZ_X2 = 1197
+  const AMZ_Y2 = 414
   const SCREEN_Y2 = 430
+  const AMZ_X1 = 925
+  const AMZ_Y1 = 117
+  const AMZ_X2 = 1197
+  const AMZ_Y2 = 414
 
   function calcScreen() {
     const mobile = window.innerWidth < 768
@@ -35,6 +44,17 @@ export default function Home() {
     const scaleX = r.width / ORIG_W
     const scaleY = r.height / ORIG_H
     setScreenStyle({
+    setAmzStyle({
+      left: AMZ_X1 * scaleX,
+      top: AMZ_Y1 * scaleY,
+      width: (AMZ_X2 - AMZ_X1) * scaleX,
+      height: (AMZ_Y2 - AMZ_Y1) * scaleY,
+    })      left: SCREEN_X1 * scaleX,
+      top: SCREEN_Y1 * scaleY,
+      width: (SCREEN_X2 - SCREEN_X1) * scaleX,
+      height: (SCREEN_Y2 - SCREEN_Y1) * scaleY,
+    })
+    setAmzStyle({
       left: SCREEN_X1 * scaleX,
       top: SCREEN_Y1 * scaleY,
       width: (SCREEN_X2 - SCREEN_X1) * scaleX,
@@ -91,7 +111,12 @@ export default function Home() {
       {/* SCREEN OVERLAY — desktop only */}
       {!isMobile && screenStyle.width > 0 && (
         <div style={{position:'fixed',top:screenStyle.top,left:screenStyle.left,width:screenStyle.width,height:screenStyle.height,zIndex:3,overflow:'hidden',background:'#000'}}>
-          {currentUpload && (
+      <a href="https://www.amazon.com/deals?tag=nys0b-20" target="_blank" rel="noopener noreferrer" style={{position:"fixed",top:amzStyle.top,left:amzStyle.left,width:amzStyle.width,height:amzStyle.height,zIndex:3,overflow:"hidden",display:"block",cursor:"pointer"}}>
+        <div style={{width:"100%",height:"100%",background:"rgba(0,0,0,0.01)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:"8px"}}>
+          <div style={{fontSize:"clamp(10px,1.5vw,16px)",fontWeight:900,color:"#FF9900",letterSpacing:"3px",textAlign:"center"}}>TODAY'S DEALS</div>
+          <div style={{fontSize:"clamp(8px,1vw,12px)",color:"rgba(255,255,255,0.6)",letterSpacing:"2px"}}>CLICK TO SHOP</div>
+        </div>
+      </a>          {currentUpload && (
             <img src={currentUpload.url} alt="on screen" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
           )}
           <div style={{position:'absolute',inset:0,background:'repeating-linear-gradient(0deg,rgba(0,0,0,0.08) 0px,rgba(0,0,0,0.08) 1px,transparent 1px,transparent 4px),repeating-linear-gradient(90deg,rgba(0,0,0,0.08) 0px,rgba(0,0,0,0.08) 1px,transparent 1px,transparent 4px)',zIndex:4,pointerEvents:'none'}}/>
