@@ -9,13 +9,42 @@ export default function Home() {
   const [showModal, setShowModal] = useState(false)
   const [uploading, setUploading] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
+  const imgRef = useRef<HTMLImageElement>(null)
+  const [screenStyle, setScreenStyle] = useState({top:0,left:0,width:0,height:0})
 
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   )
 
-  useEffect(() => { fetchUploads() }, [])
+  const ORIG_W = 1344
+  const ORIG_H = 768
+  const SCREEN_X1 = 420
+  const SCREEN_Y1 = 30
+  const SCREEN_X2 = 740
+  const SCREEN_Y2 = 610
+
+  function calcScreen() {
+    const img = imgRef.current
+    if (!img) return
+    const r = img.getBoundingClientRect()
+    const scaleX = r.width / ORIG_W
+    const scaleY = r.height / ORIG_H
+    const offsetX = r.left
+    const offsetY = r.top
+    setScreenStyle({
+      left: offsetX + SCREEN_X1 * scaleX,
+      top: offsetY + SCREEN_Y1 * scaleY,
+      width: (SCREEN_X2 - SCREEN_X1) * scaleX,
+      height: (SCREEN_Y2 - SCREEN_Y1) * scaleY,
+    })
+  }
+
+  useEffect(() => {
+    fetchUploads()
+    window.addEventListener('resize', calcScreen)
+    return () => window.removeEventListener('resize', calcScreen)
+  }, [])
 
   useEffect(() => {
     if (uploads.length <= 1) return
@@ -46,26 +75,36 @@ export default function Home() {
   const currentUpload = uploads[current]
 
   return (
-    <main style={{width:'100vw',height:'100vh',display:'flex',flexDirection:'column',fontFamily:'"Arial Black",Arial,sans-serif',overflow:'hidden',position:'relative'}}>
+    <main style={{width:'100vw',height:'100vh',overflow:'hidden',position:'relative',fontFamily:'"Arial Black",Arial,sans-serif'}}>
 
-      <div style={{position:'absolute',inset:0,backgroundImage:'url(/hero.png)',backgroundSize:'cover',backgroundPosition:'center top',zIndex:0}}/>
+      {/* HERO IMAGE — elemento real para medir */}
+      <img
+        ref={imgRef}
+        src="/hero.png"
+        alt="Iconic Screen"
+        onLoad={calcScreen}
+        style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover',objectPosition:'center top',zIndex:0}}
+      />
 
-      {/* PANTALLA CENTRAL */}
-      <div style={{
-        position:'absolute',
-        zIndex:3,
-        top:'15.4%',
-        left:'31.6%',
-        width:'33.7%',
-        height:'42.5%',
-        overflow:'hidden',
-        background:'#000'
-      }}>
-        {currentUpload && (
-          <img src={currentUpload.url} alt="on screen" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
-        )}
-      </div>
+      {/* PANTALLA — posicionada sobre el edificio */}
+      {screenStyle.width > 0 && (
+        <div style={{
+          position:'fixed',
+          top: screenStyle.top,
+          left: screenStyle.left,
+          width: screenStyle.width,
+          height: screenStyle.height,
+          zIndex:3,
+          overflow:'hidden',
+          background:'#000'
+        }}>
+          {currentUpload && (
+            <img src={currentUpload.url} alt="on screen" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
+          )}
+        </div>
+      )}
 
+      {/* NAV */}
       <nav style={{position:'relative',zIndex:4,display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 32px',borderBottom:'0.5px solid rgba(255,255,255,0.1)'}}>
         <Image src="/logo.png" alt="Iconic Screen" width={160} height={60} style={{objectFit:'contain'}}/>
         <div style={{display:'flex',gap:'28px'}}>
@@ -78,10 +117,11 @@ export default function Home() {
 
       <div style={{flex:1,position:'relative',zIndex:2}}/>
 
-      <div style={{position:'relative',zIndex:4,padding:'20px 32px 32px',display:'flex',justifyContent:'space-between',alignItems:'flex-end',background:'linear-gradient(to top, rgba(0,0,0,0.92) 80%, transparent)'}}>
+      {/* COPY + CTA */}
+      <div style={{position:'fixed',bottom:0,left:0,right:0,zIndex:4,padding:'20px 32px 32px',display:'flex',justifyContent:'space-between',alignItems:'flex-end',background:'linear-gradient(to top, rgba(0,0,0,0.92) 80%, transparent)'}}>
         <div>
           <div style={{fontSize:'9px',letterSpacing:'4px',color:'#C9A84C',marginBottom:'8px'}}>THE WORLD&apos;S SCREEN</div>
-          <div style={{fontSize:'32px',fontWeight:900,color:'#fff',lineHeight:1.1,letterSpacing:'1px',marginBottom:'8px'}}>Your face.<br/><span style={{color:'#C9A84C'}}>The internet&apos;s billboard.</span></div>
+          <div style={{fontSize:'clamp(20px,3vw,32px)',fontWeight:900,color:'#fff',lineHeight:1.1,letterSpacing:'1px',marginBottom:'8px'}}>Your face.<br/><span style={{color:'#C9A84C'}}>The internet&apos;s billboard.</span></div>
           <div style={{fontSize:'12px',color:'rgba(255,255,255,0.5)',fontFamily:'Arial',fontWeight:400,lineHeight:1.6,maxWidth:'420px'}}>Upload your image or video. Appear where Nike and Apple advertise. Free forever — or reserve your exact moment.</div>
         </div>
         <div style={{display:'flex',flexDirection:'column',gap:'10px',alignItems:'flex-end',marginLeft:'32px'}}>
@@ -91,9 +131,10 @@ export default function Home() {
         </div>
       </div>
 
+      {/* MODAL */}
       {showModal && (
         <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.85)',zIndex:10,display:'flex',alignItems:'center',justifyContent:'center'}}>
-          <div style={{background:'#0a0a0a',border:'1px solid #C9A84C',padding:'40px',width:'380px',display:'flex',flexDirection:'column',gap:'20px'}}>
+          <div style={{background:'#0a0a0a',border:'1px solid #C9A84C',padding:'40px',width:'min(380px,90vw)',display:'flex',flexDirection:'column',gap:'20px'}}>
             <div style={{fontSize:'11px',letterSpacing:'4px',color:'#C9A84C'}}>GET ON THE SCREEN</div>
             <div style={{fontSize:'22px',fontWeight:900,color:'#fff',lineHeight:1.1}}>Upload your photo<br/>or video</div>
             <div style={{fontSize:'12px',color:'#555',fontFamily:'Arial',lineHeight:1.6}}>Your content will appear on the world&apos;s most iconic screen. Instantly. For free.</div>
