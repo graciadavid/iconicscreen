@@ -1,65 +1,60 @@
-import Image from "next/image";
-
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main style={{background:'#080808',width:'100vw',height:'100vh',display:'flex',flexDirection:'column',fontFamily:'"Arial Black",Arial,sans-serif',overflow:'hidden'}}>
+
+      {/* NAV */}
+      <nav style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'16px 32px',borderBottom:'0.5px solid #1a1a1a'}}>
+        <div style={{fontSize:'15px',fontWeight:900,color:'#C9A84C',letterSpacing:'4px'}}>ICONIC SCREEN</div>
+        <div style={{display:'flex',gap:'28px'}}>
+          <span style={{fontSize:'10px',letterSpacing:'2px',color:'#555',cursor:'pointer'}}>HOW IT WORKS</span>
+          <span style={{fontSize:'10px',letterSpacing:'2px',color:'#555',cursor:'pointer'}}>PRICING</span>
+          <span style={{fontSize:'10px',letterSpacing:'2px',color:'#555',cursor:'pointer'}}>LIVE</span>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <button style={{background:'#C9A84C',color:'#080808',padding:'9px 22px',fontSize:'10px',fontWeight:900,letterSpacing:'2px',border:'none',cursor:'pointer'}}>GET ON SCREEN</button>
+      </nav>
+
+      {/* BUILDINGS */}
+      <div style={{display:'flex',gap:'6px',alignItems:'flex-end',padding:'24px 24px 0',flex:1}}>
+
+        {/* LEFT */}
+        <div style={{flex:1,height:'220px',marginTop:'40px',background:'#0c1118',display:'flex',flexDirection:'column'}}>
+          <div style={{width:'86%',margin:'0 auto',height:'130px',marginTop:'16px',background:'#0f1e30',border:'0.5px solid #1a3050',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'4px'}}>
+            <div style={{fontSize:'26px',fontWeight:900,color:'#4488cc'}}>G</div>
+            <div style={{fontSize:'8px',letterSpacing:'1px',color:'#4488cc'}}>AdSense</div>
+          </div>
         </div>
-      </main>
-    </div>
-  );
+
+        {/* CENTER */}
+        <div style={{flex:1.3,height:'260px',background:'#0c1118',display:'flex',flexDirection:'column'}}>
+          <div style={{width:'86%',margin:'0 auto',height:'150px',marginTop:'16px',background:'#0f0f20',border:'1.5px solid #C9A84C',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'6px'}}>
+            <div style={{width:'44px',height:'44px',borderRadius:'50%',background:'#C9A84C',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'18px',color:'#080808',fontWeight:900}}>?</div>
+            <div style={{fontSize:'9px',color:'#C9A84C',letterSpacing:'2px'}}>YOUR MOMENT HERE</div>
+          </div>
+        </div>
+
+        {/* RIGHT */}
+        <div style={{flex:1,height:'220px',marginTop:'40px',background:'#0c1118',display:'flex',flexDirection:'column'}}>
+          <div style={{width:'86%',margin:'0 auto',height:'130px',marginTop:'16px',background:'#1a1000',border:'0.5px solid #3a2800',display:'flex',alignItems:'center',justifyContent:'center'}}>
+            <div style={{fontSize:'20px',fontWeight:900,color:'#FF9900'}}>amazon</div>
+          </div>
+        </div>
+
+      </div>
+
+      {/* COPY + CTA */}
+      <div style={{padding:'20px 32px 24px',display:'flex',justifyContent:'space-between',alignItems:'flex-end',borderTop:'0.5px solid #111'}}>
+        <div>
+          <div style={{fontSize:'9px',letterSpacing:'4px',color:'#C9A84C',marginBottom:'8px'}}>THE WORLD&apos;S SCREEN</div>
+          <div style={{fontSize:'28px',fontWeight:900,color:'#fff',lineHeight:1.1,letterSpacing:'1px',marginBottom:'6px'}}>Your face.<br/><span style={{color:'#C9A84C'}}>The internet&apos;s billboard.</span></div>
+          <div style={{fontSize:'12px',color:'#555',fontFamily:'Arial',fontWeight:400,lineHeight:1.5,maxWidth:'400px'}}>Upload your image or video. Appear where Nike and Apple advertise. Free forever — or reserve your exact moment.</div>
+        </div>
+        <div style={{display:'flex',flexDirection:'column',gap:'10px',alignItems:'flex-end',marginLeft:'32px'}}>
+          <button style={{background:'#C9A84C',color:'#080808',padding:'14px 32px',fontSize:'11px',fontWeight:900,letterSpacing:'3px',border:'none',cursor:'pointer',whiteSpace:'nowrap'}}>GET ON THE SCREEN</button>
+          <button style={{background:'transparent',color:'#C9A84C',padding:'13px 24px',fontSize:'10px',fontWeight:900,letterSpacing:'2px',border:'0.5px solid #C9A84C',cursor:'pointer',whiteSpace:'nowrap'}}>RESERVE YOUR SLOT</button>
+          <div style={{fontSize:'10px',color:'#333',fontFamily:'Arial',letterSpacing:'1px'}}>Free to upload · $9 per hour slot</div>
+        </div>
+      </div>
+
+    </main>
+  )
 }
