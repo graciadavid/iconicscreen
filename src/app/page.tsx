@@ -26,7 +26,7 @@ export default function Home() {
   const SCREEN_X2 = 834
   const SCREEN_Y2 = 430
   const AMZ_X1 = 925
-  const AMZ_Y1 = 117
+  const AMZ_Y1 = 280
   const AMZ_X2 = 1197
   const AMZ_Y2 = 414
 
