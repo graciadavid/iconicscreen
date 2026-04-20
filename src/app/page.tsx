@@ -54,10 +54,10 @@ export default function Home() {
       <div style={{
         position:'absolute',
         zIndex:3,
-        top:'5%',
-        left:'38%',
-        width:'24%',
-        height:'63%',
+        top:'15.4%',
+        left:'31.6%',
+        width:'33.7%',
+        height:'42.5%',
         overflow:'hidden',
         background:'#000'
       }}>
