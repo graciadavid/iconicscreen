@@ -10,7 +10,8 @@ export default function Home() {
   const [uploading, setUploading] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
   const imgRef = useRef<HTMLImageElement>(null)
-  const [screenStyle, setScreenStyle] = useState({top:0,left:0,width:0,height:0})
+  const [
+screenStyle, setScreenStyle] = useState({top:0,left:0,width:0,height:0})
 
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -19,10 +20,10 @@ export default function Home() {
 
   const ORIG_W = 1344
   const ORIG_H = 768
-  const SCREEN_X1 = 471
+  const SCREEN_X1 = 472
   const SCREEN_Y1 = 135
   const SCREEN_X2 = 839
-  const SCREEN_Y2 = 395
+  const SCREEN_Y2 = 375
 
   function calcScreen() {
     const img = imgRef.current
