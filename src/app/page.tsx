@@ -39,18 +39,8 @@ export default function Home() {
     const r = img.getBoundingClientRect()
     const scaleX = r.width / ORIG_W
     const scaleY = r.height / ORIG_H
-    setScreenStyle({
-      left: SCREEN_X1 * scaleX,
-      top: SCREEN_Y1 * scaleY,
-      width: (SCREEN_X2 - SCREEN_X1) * scaleX,
-      height: (SCREEN_Y2 - SCREEN_Y1) * scaleY,
-    })
-    setAmzStyle({
-      left: AMZ_X1 * scaleX,
-      top: AMZ_Y1 * scaleY,
-      width: (AMZ_X2 - AMZ_X1) * scaleX,
-      height: (AMZ_Y2 - AMZ_Y1) * scaleY,
-    })
+    setScreenStyle({left:SCREEN_X1*scaleX,top:SCREEN_Y1*scaleY,width:(SCREEN_X2-SCREEN_X1)*scaleX,height:(SCREEN_Y2-SCREEN_Y1)*scaleY})
+    setAmzStyle({left:AMZ_X1*scaleX,top:AMZ_Y1*scaleY,width:(AMZ_X2-AMZ_X1)*scaleX,height:(AMZ_Y2-AMZ_Y1)*scaleY})
   }
 
   useEffect(() => {
@@ -91,38 +81,25 @@ export default function Home() {
   return (
     <main style={{width:'100vw',height:'100vh',overflow:'hidden',position:'relative',fontFamily:'"Arial Black",Arial,sans-serif'}}>
 
-      <img
-        ref={imgRef}
-        src="/hero.png"
-        alt="Iconic Screen"
-        onLoad={calcScreen}
-        style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:isMobile?'cover':'fill',objectPosition:'center top',zIndex:0}}
-      />
+      <img ref={imgRef} src="/hero.png" alt="Iconic Screen" onLoad={calcScreen}
+        style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:isMobile?'cover':'fill',objectPosition:'center top',zIndex:0}}/>
 
-      {/* PANTALLA CENTRAL */}
       {!isMobile && screenStyle.width > 0 && (
         <div style={{position:'fixed',top:screenStyle.top,left:screenStyle.left,width:screenStyle.width,height:screenStyle.height,zIndex:3,overflow:'hidden',background:'#000'}}>
-          {currentUpload && (
-            <img src={currentUpload.url} alt="on screen" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
-          )}
+          {currentUpload && <img src={currentUpload.url} alt="on screen" style={{width:'100%',height:'100%',objectFit:'cover'}}/>}
           <div style={{position:'absolute',inset:0,background:'repeating-linear-gradient(0deg,rgba(0,0,0,0.08) 0px,rgba(0,0,0,0.08) 1px,transparent 1px,transparent 4px),repeating-linear-gradient(90deg,rgba(0,0,0,0.08) 0px,rgba(0,0,0,0.08) 1px,transparent 1px,transparent 4px)',zIndex:4,pointerEvents:'none'}}/>
           {uploads.length > 1 && (
             <div style={{position:'absolute',bottom:'8px',left:'50%',transform:'translateX(-50%)',display:'flex',gap:'4px',zIndex:5}}>
-              {uploads.map((_,i) => (
-                <div key={i} style={{width:'5px',height:'5px',borderRadius:'50%',background:i===current?'#C9A84C':'rgba(255,255,255,0.3)'}}/>
-              ))}
+              {uploads.map((_,i) => <div key={i} style={{width:'5px',height:'5px',borderRadius:'50%',background:i===current?'#C9A84C':'rgba(255,255,255,0.3)'}}/>)}
             </div>
           )}
         </div>
       )}
 
-      {/* AMAZON OVERLAY */}
       {!isMobile && amzStyle.width > 0 && (
-        
-          
-          
-          
-          style={{position:'fixed',top:amzStyle.top,left:amzStyle.left,width:amzStyle.width,height:amzStyle.height,zIndex:3,display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',textDecoration:'none'}}
+        <div
+          onClick={() => window.open('https://www.amazon.com/deals?tag=nys0b-20', '_blank')}
+          style={{position:'fixed',top:amzStyle.top,left:amzStyle.left,width:amzStyle.width,height:amzStyle.height,zIndex:3,display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer'}}
         >
           <div style={{textAlign:'center'}}>
             <div style={{fontSize:'clamp(10px,1.5vw,18px)',fontWeight:900,color:'#FF9900',letterSpacing:'3px'}}>TODAY&apos;S DEALS</div>
@@ -131,7 +108,6 @@ export default function Home() {
         </div>
       )}
 
-      {/* NAV */}
       <nav style={{position:'relative',zIndex:4,display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 32px',background:'linear-gradient(to bottom,rgba(0,0,0,0.6),transparent)'}}>
         <Image src="/logo.png" alt="Iconic Screen" width={isMobile?100:140} height={isMobile?38:52} style={{objectFit:'contain'}}/>
         {!isMobile && (
@@ -144,7 +120,6 @@ export default function Home() {
         <button onClick={() => setShowModal(true)} style={{background:'#C9A84C',color:'#080808',padding:'9px 22px',fontSize:'10px',fontWeight:900,letterSpacing:'2px',border:'none',cursor:'pointer'}}>GET ON SCREEN</button>
       </nav>
 
-      {/* COPY + CTA */}
       <div style={{position:'fixed',bottom:0,left:0,right:0,zIndex:4,padding:isMobile?'16px 20px 24px':'20px 32px 32px',display:'flex',flexDirection:isMobile?'column':'row',justifyContent:'space-between',alignItems:isMobile?'stretch':'flex-end',gap:isMobile?'12px':'0',background:'linear-gradient(to top,rgba(0,0,0,0.95) 60%,transparent)'}}>
         <div>
           <div style={{fontSize:'9px',letterSpacing:'4px',color:'#C9A84C',marginBottom:'6px'}}>THE WORLD&apos;S SCREEN</div>
@@ -158,7 +133,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* MODAL */}
       {showModal && (
         <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.85)',zIndex:10,display:'flex',alignItems:'center',justifyContent:'center'}}>
           <div style={{background:'#0a0a0a',border:'1px solid #C9A84C',padding:'40px',width:'min(380px,90vw)',display:'flex',flexDirection:'column',gap:'20px'}}>
