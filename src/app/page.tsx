@@ -119,16 +119,16 @@ export default function Home() {
       {/* AMAZON OVERLAY */}
       {!isMobile && amzStyle.width > 0 && (
         
-          href="https://www.amazon.com/deals?tag=nys0b-20"
-          target="_blank"
-          rel="noopener noreferrer"
+          
+          
+          
           style={{position:'fixed',top:amzStyle.top,left:amzStyle.left,width:amzStyle.width,height:amzStyle.height,zIndex:3,display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',textDecoration:'none'}}
         >
           <div style={{textAlign:'center'}}>
             <div style={{fontSize:'clamp(10px,1.5vw,18px)',fontWeight:900,color:'#FF9900',letterSpacing:'3px'}}>TODAY&apos;S DEALS</div>
             <div style={{fontSize:'clamp(8px,1vw,12px)',color:'rgba(255,255,255,0.6)',letterSpacing:'2px',marginTop:'4px'}}>CLICK TO SHOP</div>
           </div>
-        </a>
+        </div>
       )}
 
       {/* NAV */}
