@@ -47,28 +47,26 @@ export default function Home() {
 
   return (
     <main style={{width:'100vw',height:'100vh',display:'flex',flexDirection:'column',fontFamily:'"Arial Black",Arial,sans-serif',overflow:'hidden',position:'relative'}}>
+
       <div style={{position:'absolute',inset:0,backgroundImage:'url(/hero.png)',backgroundSize:'cover',backgroundPosition:'center top',zIndex:0}}/>
 
-      {/* PANTALLA — sin bordes, blend con el edificio */}
+      {/* PANTALLA CENTRAL */}
       <div style={{
         position:'absolute',
         zIndex:3,
-        top:'4%',
-        left:'33%',
-        width:'34%',
-        height:'62%',
+        top:'5%',
+        left:'38%',
+        width:'24%',
+        height:'63%',
         overflow:'hidden',
-        mixBlendMode:'luminosity',
-        opacity:0.92
+        background:'#000'
       }}>
-        {currentUpload ? (
+        {currentUpload && (
           <img src={currentUpload.url} alt="on screen" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
-        ) : (
-          <div style={{width:'100%',height:'100%',background:'transparent'}}/>
         )}
       </div>
 
-      <nav style={{position:'relative',zIndex:2,display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 32px',borderBottom:'0.5px solid rgba(255,255,255,0.1)'}}>
+      <nav style={{position:'relative',zIndex:4,display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 32px',borderBottom:'0.5px solid rgba(255,255,255,0.1)'}}>
         <Image src="/logo.png" alt="Iconic Screen" width={160} height={60} style={{objectFit:'contain'}}/>
         <div style={{display:'flex',gap:'28px'}}>
           <span style={{fontSize:'10px',letterSpacing:'2px',color:'rgba(255,255,255,0.5)',cursor:'pointer'}}>HOW IT WORKS</span>
@@ -80,7 +78,7 @@ export default function Home() {
 
       <div style={{flex:1,position:'relative',zIndex:2}}/>
 
-      <div style={{position:'relative',zIndex:2,padding:'20px 32px 32px',display:'flex',justifyContent:'space-between',alignItems:'flex-end',background:'linear-gradient(to top, rgba(0,0,0,0.92) 80%, transparent)'}}>
+      <div style={{position:'relative',zIndex:4,padding:'20px 32px 32px',display:'flex',justifyContent:'space-between',alignItems:'flex-end',background:'linear-gradient(to top, rgba(0,0,0,0.92) 80%, transparent)'}}>
         <div>
           <div style={{fontSize:'9px',letterSpacing:'4px',color:'#C9A84C',marginBottom:'8px'}}>THE WORLD&apos;S SCREEN</div>
           <div style={{fontSize:'32px',fontWeight:900,color:'#fff',lineHeight:1.1,letterSpacing:'1px',marginBottom:'8px'}}>Your face.<br/><span style={{color:'#C9A84C'}}>The internet&apos;s billboard.</span></div>
@@ -107,6 +105,7 @@ export default function Home() {
           </div>
         </div>
       )}
+
     </main>
   )
 }
