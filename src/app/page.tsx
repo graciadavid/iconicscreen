@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 export default function Home() {
   return (
     <main style={{width:'100vw',height:'100vh',display:'flex',flexDirection:'column',fontFamily:'"Arial Black",Arial,sans-serif',overflow:'hidden',position:'relative'}}>
@@ -9,8 +11,8 @@ export default function Home() {
       <div style={{position:'absolute',inset:0,background:'rgba(0,0,0,0.45)',zIndex:1}}/>
 
       {/* NAV */}
-      <nav style={{position:'relative',zIndex:2,display:'flex',justifyContent:'space-between',alignItems:'center',padding:'16px 32px',borderBottom:'0.5px solid rgba(255,255,255,0.1)'}}>
-        <div style={{fontSize:'15px',fontWeight:900,color:'#C9A84C',letterSpacing:'4px'}}>ICONIC SCREEN</div>
+      <nav style={{position:'relative',zIndex:2,display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 32px',borderBottom:'0.5px solid rgba(255,255,255,0.1)'}}>
+        <Image src="/logo.png" alt="Iconic Screen" width={160} height={60} style={{objectFit:'contain'}}/>
         <div style={{display:'flex',gap:'28px'}}>
           <span style={{fontSize:'10px',letterSpacing:'2px',color:'rgba(255,255,255,0.5)',cursor:'pointer'}}>HOW IT WORKS</span>
           <span style={{fontSize:'10px',letterSpacing:'2px',color:'rgba(255,255,255,0.5)',cursor:'pointer'}}>PRICING</span>
@@ -19,7 +21,7 @@ export default function Home() {
         <button style={{background:'#C9A84C',color:'#080808',padding:'9px 22px',fontSize:'10px',fontWeight:900,letterSpacing:'2px',border:'none',cursor:'pointer'}}>GET ON SCREEN</button>
       </nav>
 
-      {/* SPACER — buildings occupy most of the viewport */}
+      {/* SPACER */}
       <div style={{flex:1,position:'relative',zIndex:2}}/>
 
       {/* COPY + CTA */}
