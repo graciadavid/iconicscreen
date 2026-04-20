@@ -83,7 +83,7 @@ export default function Home() {
         src="/hero.png"
         alt="Iconic Screen"
         onLoad={calcScreen}
-        style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover',objectPosition:'center top',zIndex:0}}
+        style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'fill',zIndex:0}}
       />
 
       {/* PANTALLA — posicionada sobre el edificio */}
