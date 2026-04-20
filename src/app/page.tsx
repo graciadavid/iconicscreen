@@ -19,10 +19,10 @@ export default function Home() {
 
   const ORIG_W = 1344
   const ORIG_H = 768
-  const SCREEN_X1 = 420
-  const SCREEN_Y1 = 30
-  const SCREEN_X2 = 740
-  const SCREEN_Y2 = 610
+  const SCREEN_X1 = 462
+  const SCREEN_Y1 = 62
+  const SCREEN_X2 = 756
+  const SCREEN_Y2 = 592
 
   function calcScreen() {
     const img = imgRef.current
