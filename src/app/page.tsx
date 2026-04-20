@@ -10,8 +10,7 @@ export default function Home() {
   const [uploading, setUploading] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
   const imgRef = useRef<HTMLImageElement>(null)
-  const [
-screenStyle, setScreenStyle] = useState({top:0,left:0,width:0,height:0})
+  const [screenStyle, setScreenStyle] = useState({top:0,left:0,width:0,height:0})
 
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -31,8 +30,6 @@ screenStyle, setScreenStyle] = useState({top:0,left:0,width:0,height:0})
     const r = img.getBoundingClientRect()
     const scaleX = r.width / ORIG_W
     const scaleY = r.height / ORIG_H
-    const offsetX = r.left
-    const offsetY = r.top
     setScreenStyle({
       left: SCREEN_X1 * scaleX,
       top: SCREEN_Y1 * scaleY,
@@ -54,7 +51,7 @@ screenStyle, setScreenStyle] = useState({top:0,left:0,width:0,height:0})
   }, [uploads])
 
   async function fetchUploads() {
-    const { data } = await supabase.from('uploads').select('id, url').order('created_at', { ascending: false })
+    const { data } = await supabase.from('uploads').select('id,url').order('created_at', { ascending: false })
     if (data) setUploads(data)
   }
 
@@ -78,7 +75,6 @@ screenStyle, setScreenStyle] = useState({top:0,left:0,width:0,height:0})
   return (
     <main style={{width:'100vw',height:'100vh',overflow:'hidden',position:'relative',fontFamily:'"Arial Black",Arial,sans-serif'}}>
 
-      {/* HERO IMAGE — elemento real para medir */}
       <img
         ref={imgRef}
         src="/hero.png"
@@ -87,7 +83,6 @@ screenStyle, setScreenStyle] = useState({top:0,left:0,width:0,height:0})
         style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'fill',zIndex:0}}
       />
 
-      {/* PANTALLA — posicionada sobre el edificio */}
       {screenStyle.width > 0 && (
         <div style={{
           position:'fixed',
@@ -102,12 +97,25 @@ screenStyle, setScreenStyle] = useState({top:0,left:0,width:0,height:0})
           {currentUpload && (
             <img src={currentUpload.url} alt="on screen" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
           )}
+          <div style={{
+            position:'absolute',
+            inset:0,
+            background:'repeating-linear-gradient(0deg,rgba(0,0,0,0.1) 0px,rgba(0,0,0,0.1) 1px,transparent 1px,transparent 4px),repeating-linear-gradient(90deg,rgba(0,0,0,0.1) 0px,rgba(0,0,0,0.1) 1px,transparent 1px,transparent 4px)',
+            zIndex:4,
+            pointerEvents:'none'
+          }}/>
+          {uploads.length > 1 && (
+            <div style={{position:'absolute',bottom:'8px',left:'50%',transform:'translateX(-50%)',display:'flex',gap:'4px',zIndex:5}}>
+              {uploads.map((_,i) => (
+                <div key={i} style={{width:'5px',height:'5px',borderRadius:'50%',background:i===current?'#C9A84C':'rgba(255,255,255,0.3)'}}/>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
-      {/* NAV */}
-      <nav style={{position:'relative',zIndex:4,display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 32px',borderBottom:'0.5px solid rgba(255,255,255,0.1)'}}>
-        <Image src="/logo.png" alt="Iconic Screen" width={160} height={60} style={{objectFit:'contain'}}/>
+      <nav style={{position:'relative',zIndex:4,display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 32px',background:'linear-gradient(to bottom,rgba(0,0,0,0.6),transparent)'}}>
+        <Image src="/logo.png" alt="Iconic Screen" width={140} height={52} style={{objectFit:'contain'}}/>
         <div style={{display:'flex',gap:'28px'}}>
           <span style={{fontSize:'10px',letterSpacing:'2px',color:'rgba(255,255,255,0.5)',cursor:'pointer'}}>HOW IT WORKS</span>
           <span style={{fontSize:'10px',letterSpacing:'2px',color:'rgba(255,255,255,0.5)',cursor:'pointer'}}>PRICING</span>
@@ -116,13 +124,10 @@ screenStyle, setScreenStyle] = useState({top:0,left:0,width:0,height:0})
         <button onClick={() => setShowModal(true)} style={{background:'#C9A84C',color:'#080808',padding:'9px 22px',fontSize:'10px',fontWeight:900,letterSpacing:'2px',border:'none',cursor:'pointer'}}>GET ON SCREEN</button>
       </nav>
 
-      <div style={{flex:1,position:'relative',zIndex:2}}/>
-
-      {/* COPY + CTA */}
-      <div style={{position:'fixed',bottom:0,left:0,right:0,zIndex:4,padding:'20px 32px 32px',display:'flex',justifyContent:'space-between',alignItems:'flex-end',background:'linear-gradient(to top, rgba(0,0,0,0.92) 80%, transparent)'}}>
+      <div style={{position:'fixed',bottom:0,left:0,right:0,zIndex:4,padding:'20px 32px 32px',display:'flex',justifyContent:'space-between',alignItems:'flex-end',background:'linear-gradient(to top,rgba(0,0,0,0.92) 60%,transparent)'}}>
         <div>
           <div style={{fontSize:'9px',letterSpacing:'4px',color:'#C9A84C',marginBottom:'8px'}}>THE WORLD&apos;S SCREEN</div>
-          <div style={{fontSize:'clamp(20px,3vw,32px)',fontWeight:900,color:'#fff',lineHeight:1.1,letterSpacing:'1px',marginBottom:'8px'}}>Your face.<br/><span style={{color:'#C9A84C'}}>The internet&apos;s billboard.</span></div>
+          <div style={{fontSize:'clamp(18px,2.5vw,32px)',fontWeight:900,color:'#fff',lineHeight:1.1,letterSpacing:'1px',marginBottom:'8px'}}>Your face.<br/><span style={{color:'#C9A84C'}}>The internet&apos;s billboard.</span></div>
           <div style={{fontSize:'12px',color:'rgba(255,255,255,0.5)',fontFamily:'Arial',fontWeight:400,lineHeight:1.6,maxWidth:'420px'}}>Upload your image or video. Appear where Nike and Apple advertise. Free forever — or reserve your exact moment.</div>
         </div>
         <div style={{display:'flex',flexDirection:'column',gap:'10px',alignItems:'flex-end',marginLeft:'32px'}}>
@@ -132,7 +137,6 @@ screenStyle, setScreenStyle] = useState({top:0,left:0,width:0,height:0})
         </div>
       </div>
 
-      {/* MODAL */}
       {showModal && (
         <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.85)',zIndex:10,display:'flex',alignItems:'center',justifyContent:'center'}}>
           <div style={{background:'#0a0a0a',border:'1px solid #C9A84C',padding:'40px',width:'min(380px,90vw)',display:'flex',flexDirection:'column',gap:'20px'}}>
