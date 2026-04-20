@@ -1,14 +1,85 @@
+'use client'
 import Image from 'next/image'
+import { useState, useEffect, useRef } from 'react'
+import { createClient } from '@supabase/supabase-js'
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+)
 
 export default function Home() {
+  const [uploads, setUploads] = useState<{id:string,url:string}[]>([])
+  const [current, setCurrent] = useState(0)
+  const [showModal, setShowModal] = useState(false)
+  const [uploading, setUploading] = useState(false)
+  const fileRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    fetchUploads()
+  }, [])
+
+  useEffect(() => {
+    if (uploads.length <= 1) return
+    const t = setInterval(() => {
+      setCurrent(c => (c + 1) % uploads.length)
+    }, 5000)
+    return () => clearInterval(t)
+  }, [uploads])
+
+  async function fetchUploads() {
+    const { data } = await supabase
+      .from('uploads')
+      .select('id, url')
+      .order('created_at', { ascending: false })
+    if (data) setUploads(data)
+  }
+
+  async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploading(true)
+    const ext = file.name.split('.').pop()
+    const filename = `${Date.now()}.${ext}`
+    const { error } = await supabase.storage
+      .from('uploads')
+      .upload(filename, file, { cacheControl: '3600', upsert: false })
+    if (!error) {
+      const { data: urlData } = supabase.storage
+        .from('uploads')
+        .getPublicUrl(filename)
+      await supabase.from('uploads').insert({ url: urlData.publicUrl })
+      await fetchUploads()
+      setShowModal(false)
+    }
+    setUploading(false)
+  }
+
+  const currentUpload = uploads[current]
+
   return (
     <main style={{width:'100vw',height:'100vh',display:'flex',flexDirection:'column',fontFamily:'"Arial Black",Arial,sans-serif',overflow:'hidden',position:'relative'}}>
 
-      {/* HERO IMAGE */}
       <div style={{position:'absolute',inset:0,backgroundImage:'url(/hero.png)',backgroundSize:'cover',backgroundPosition:'center top',zIndex:0}}/>
+      <div style={{position:'absolute',inset:0,background:'rgba(0,0,0,0.35)',zIndex:1}}/>
 
-      {/* DARK OVERLAY */}
-      <div style={{position:'absolute',inset:0,background:'rgba(0,0,0,0.45)',zIndex:1}}/>
+      {/* PANTALLA CENTRAL — encima de la foto de la pareja */}
+      <div style={{position:'absolute',zIndex:3,top:'8%',left:'50%',transform:'translateX(-50%)',width:'28%',aspectRatio:'3/4',border:'3px solid #C9A84C',overflow:'hidden',background:'#000'}}>
+        {currentUpload ? (
+          <img src={currentUpload.url} alt="on screen" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
+        ) : (
+          <div style={{width:'100%',height:'100%',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'12px',background:'#0a0a0a'}}>
+            <div style={{fontSize:'11px',color:'#C9A84C',letterSpacing:'3px',textAlign:'center'}}>YOUR MOMENT<br/>HERE</div>
+          </div>
+        )}
+        {uploads.length > 1 && (
+          <div style={{position:'absolute',bottom:'8px',left:'50%',transform:'translateX(-50%)',display:'flex',gap:'4px'}}>
+            {uploads.map((_,i) => (
+              <div key={i} style={{width:'6px',height:'6px',borderRadius:'50%',background: i===current ? '#C9A84C' : 'rgba(255,255,255,0.3)'}}/>
+            ))}
+          </div>
+        )}
+      </div>
 
       {/* NAV */}
       <nav style={{position:'relative',zIndex:2,display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 32px',borderBottom:'0.5px solid rgba(255,255,255,0.1)'}}>
@@ -18,10 +89,9 @@ export default function Home() {
           <span style={{fontSize:'10px',letterSpacing:'2px',color:'rgba(255,255,255,0.5)',cursor:'pointer'}}>PRICING</span>
           <span style={{fontSize:'10px',letterSpacing:'2px',color:'rgba(255,255,255,0.5)',cursor:'pointer'}}>LIVE</span>
         </div>
-        <button style={{background:'#C9A84C',color:'#080808',padding:'9px 22px',fontSize:'10px',fontWeight:900,letterSpacing:'2px',border:'none',cursor:'pointer'}}>GET ON SCREEN</button>
+        <button onClick={() => setShowModal(true)} style={{background:'#C9A84C',color:'#080808',padding:'9px 22px',fontSize:'10px',fontWeight:900,letterSpacing:'2px',border:'none',cursor:'pointer'}}>GET ON SCREEN</button>
       </nav>
 
-      {/* SPACER */}
       <div style={{flex:1,position:'relative',zIndex:2}}/>
 
       {/* COPY + CTA */}
@@ -32,11 +102,31 @@ export default function Home() {
           <div style={{fontSize:'12px',color:'rgba(255,255,255,0.5)',fontFamily:'Arial',fontWeight:400,lineHeight:1.6,maxWidth:'420px'}}>Upload your image or video. Appear where Nike and Apple advertise. Free forever — or reserve your exact moment.</div>
         </div>
         <div style={{display:'flex',flexDirection:'column',gap:'10px',alignItems:'flex-end',marginLeft:'32px'}}>
-          <button style={{background:'#C9A84C',color:'#080808',padding:'14px 32px',fontSize:'11px',fontWeight:900,letterSpacing:'3px',border:'none',cursor:'pointer',whiteSpace:'nowrap'}}>GET ON THE SCREEN</button>
+          <button onClick={() => setShowModal(true)} style={{background:'#C9A84C',color:'#080808',padding:'14px 32px',fontSize:'11px',fontWeight:900,letterSpacing:'3px',border:'none',cursor:'pointer',whiteSpace:'nowrap'}}>GET ON THE SCREEN</button>
           <button style={{background:'transparent',color:'#C9A84C',padding:'13px 24px',fontSize:'10px',fontWeight:900,letterSpacing:'2px',border:'0.5px solid #C9A84C',cursor:'pointer',whiteSpace:'nowrap'}}>RESERVE YOUR SLOT</button>
           <div style={{fontSize:'10px',color:'rgba(255,255,255,0.25)',fontFamily:'Arial',letterSpacing:'1px'}}>Free to upload · $9 per hour slot</div>
         </div>
       </div>
+
+      {/* MODAL UPLOAD */}
+      {showModal && (
+        <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.85)',zIndex:10,display:'flex',alignItems:'center',justifyContent:'center'}}>
+          <div style={{background:'#0a0a0a',border:'1px solid #C9A84C',padding:'40px',width:'380px',display:'flex',flexDirection:'column',gap:'20px'}}>
+            <div style={{fontSize:'11px',letterSpacing:'4px',color:'#C9A84C'}}>GET ON THE SCREEN</div>
+            <div style={{fontSize:'22px',fontWeight:900,color:'#fff',lineHeight:1.1}}>Upload your photo<br/>or video</div>
+            <div style={{fontSize:'12px',color:'#555',fontFamily:'Arial',lineHeight:1.6}}>Your content will appear on the world&apos;s most iconic screen. Instantly. For free.</div>
+            <input ref={fileRef} type="file" accept="image/*,video/*" onChange={handleUpload} style={{display:'none'}}/>
+            <button
+              onClick={() => fileRef.current?.click()}
+              disabled={uploading}
+              style={{background:'#C9A84C',color:'#080808',padding:'16px',fontSize:'12px',fontWeight:900,letterSpacing:'3px',border:'none',cursor:'pointer'}}
+            >
+              {uploading ? 'UPLOADING...' : 'CHOOSE FILE'}
+            </button>
+            <button onClick={() => setShowModal(false)} style={{background:'transparent',color:'#555',padding:'12px',fontSize:'11px',letterSpacing:'2px',border:'0.5px solid #333',cursor:'pointer'}}>CANCEL</button>
+          </div>
+        </div>
+      )}
 
     </main>
   )
