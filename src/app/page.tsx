@@ -3,17 +3,17 @@ import Image from 'next/image'
 import { useState, useEffect, useRef } from 'react'
 import { createClient } from '@supabase/supabase-js'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
-
 export default function Home() {
   const [uploads, setUploads] = useState<{id:string,url:string}[]>([])
   const [current, setCurrent] = useState(0)
   const [showModal, setShowModal] = useState(false)
   const [uploading, setUploading] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
+
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
 
   useEffect(() => {
     fetchUploads()
@@ -63,7 +63,6 @@ export default function Home() {
       <div style={{position:'absolute',inset:0,backgroundImage:'url(/hero.png)',backgroundSize:'cover',backgroundPosition:'center top',zIndex:0}}/>
       <div style={{position:'absolute',inset:0,background:'rgba(0,0,0,0.35)',zIndex:1}}/>
 
-      {/* PANTALLA CENTRAL — encima de la foto de la pareja */}
       <div style={{position:'absolute',zIndex:3,top:'8%',left:'50%',transform:'translateX(-50%)',width:'28%',aspectRatio:'3/4',border:'3px solid #C9A84C',overflow:'hidden',background:'#000'}}>
         {currentUpload ? (
           <img src={currentUpload.url} alt="on screen" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
@@ -81,7 +80,6 @@ export default function Home() {
         )}
       </div>
 
-      {/* NAV */}
       <nav style={{position:'relative',zIndex:2,display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 32px',borderBottom:'0.5px solid rgba(255,255,255,0.1)'}}>
         <Image src="/logo.png" alt="Iconic Screen" width={160} height={60} style={{objectFit:'contain'}}/>
         <div style={{display:'flex',gap:'28px'}}>
@@ -94,7 +92,6 @@ export default function Home() {
 
       <div style={{flex:1,position:'relative',zIndex:2}}/>
 
-      {/* COPY + CTA */}
       <div style={{position:'relative',zIndex:2,padding:'20px 32px 32px',display:'flex',justifyContent:'space-between',alignItems:'flex-end',background:'linear-gradient(to top, rgba(0,0,0,0.92) 80%, transparent)'}}>
         <div>
           <div style={{fontSize:'9px',letterSpacing:'4px',color:'#C9A84C',marginBottom:'8px'}}>THE WORLD&apos;S SCREEN</div>
@@ -108,7 +105,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* MODAL UPLOAD */}
       {showModal && (
         <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.85)',zIndex:10,display:'flex',alignItems:'center',justifyContent:'center'}}>
           <div style={{background:'#0a0a0a',border:'1px solid #C9A84C',padding:'40px',width:'380px',display:'flex',flexDirection:'column',gap:'20px'}}>
@@ -116,11 +112,7 @@ export default function Home() {
             <div style={{fontSize:'22px',fontWeight:900,color:'#fff',lineHeight:1.1}}>Upload your photo<br/>or video</div>
             <div style={{fontSize:'12px',color:'#555',fontFamily:'Arial',lineHeight:1.6}}>Your content will appear on the world&apos;s most iconic screen. Instantly. For free.</div>
             <input ref={fileRef} type="file" accept="image/*,video/*" onChange={handleUpload} style={{display:'none'}}/>
-            <button
-              onClick={() => fileRef.current?.click()}
-              disabled={uploading}
-              style={{background:'#C9A84C',color:'#080808',padding:'16px',fontSize:'12px',fontWeight:900,letterSpacing:'3px',border:'none',cursor:'pointer'}}
-            >
+            <button onClick={() => fileRef.current?.click()} disabled={uploading} style={{background:'#C9A84C',color:'#080808',padding:'16px',fontSize:'12px',fontWeight:900,letterSpacing:'3px',border:'none',cursor:'pointer'}}>
               {uploading ? 'UPLOADING...' : 'CHOOSE FILE'}
             </button>
             <button onClick={() => setShowModal(false)} style={{background:'transparent',color:'#555',padding:'12px',fontSize:'11px',letterSpacing:'2px',border:'0.5px solid #333',cursor:'pointer'}}>CANCEL</button>
