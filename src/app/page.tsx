@@ -21,9 +21,9 @@ screenStyle, setScreenStyle] = useState({top:0,left:0,width:0,height:0})
   const ORIG_W = 1344
   const ORIG_H = 768
   const SCREEN_X1 = 474
-  const SCREEN_Y1 = 80
+  const SCREEN_Y1 = 90
   const SCREEN_X2 = 836
-  const SCREEN_Y2 = 570
+  const SCREEN_Y2 = 550
 
   function calcScreen() {
     const img = imgRef.current
