@@ -34,8 +34,8 @@ screenStyle, setScreenStyle] = useState({top:0,left:0,width:0,height:0})
     const offsetX = r.left
     const offsetY = r.top
     setScreenStyle({
-      left: offsetX + SCREEN_X1 * scaleX,
-      top: offsetY + SCREEN_Y1 * scaleY,
+      left: SCREEN_X1 * scaleX,
+      top: SCREEN_Y1 * scaleY,
       width: (SCREEN_X2 - SCREEN_X1) * scaleX,
       height: (SCREEN_Y2 - SCREEN_Y1) * scaleY,
     })
