@@ -82,12 +82,11 @@ export default function Home() {
 
       {/* NAV */}
       <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'10px 32px',background:'#080808',borderBottom:'0.5px solid #1a1a1a',flexShrink:0,zIndex:5}}>
-        <img src="/logo.png" alt="Iconic Screen" style={{height:'52px',objectFit:'contain'}}/>
+        <div style={{display:"flex",alignItems:"center",gap:"16px"}}><img src="/logo.png" alt="Iconic Screen" style={{height:"52px",objectFit:"contain"}}/><LiveCounter small/></div>
         <div style={{fontSize:'clamp(14px,1.5vw,20px)',fontWeight:900,color:'#fff',lineHeight:1.1,textAlign:'center',position:'absolute',left:'50%',transform:'translateX(-50%)',whiteSpace:'nowrap'}}>
           Your face. <span style={{color:'#C9A84C'}}>The internet&apos;s billboard.</span>
         </div>
         <div style={{display:'flex',alignItems:'center',gap:'20px'}}>
-          <LiveCounter small/>
           <div style={{display:'flex',gap:'10px'}}>
             <button onClick={() => { setModalMode('free'); setShowModal(true) }}
               style={{background:'#C9A84C',color:'#080808',padding:'10px 20px',fontSize:'10px',fontWeight:900,letterSpacing:'2px',border:'none',cursor:'pointer',whiteSpace:'nowrap'}}>
