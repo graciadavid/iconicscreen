@@ -1,8 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { createClient } from '@supabase/supabase-js'
-
-const PASSWORD = 'iconic2026'
+import { supabase } from '@/lib/supabase'
+import { ADMIN_PASSWORD } from '@/lib/constants'
 
 export default function Admin() {
   const [auth, setAuth] = useState(false)
@@ -12,21 +11,8 @@ export default function Admin() {
   const [stats, setStats] = useState({total:0,pending:0,active:0,published:0})
   const [clock, setClock] = useState('')
 
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
-
-  // Reloj americano
   useEffect(() => {
-    const tick = () => {
-      const now = new Date()
-      setClock(now.toLocaleString('en-US', {
-        month:'long', day:'numeric', year:'numeric',
-        hour:'2-digit', minute:'2-digit', second:'2-digit',
-        hour12:true
-      }))
-    }
+    const tick = () => setClock(new Date().toLocaleString('en-US',{month:'long',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true}))
     tick()
     const t = setInterval(tick, 1000)
     return () => clearInterval(t)
@@ -47,29 +33,16 @@ export default function Admin() {
     const { data } = await supabase.from('uploads').select('status')
     if (data) setStats({
       total: data.length,
-      pending: data.filter(d => d.status === 'pending').length,
-      active: data.filter(d => d.status === 'active').length,
-      published: data.filter(d => d.status === 'published').length,
+      pending: data.filter((d:any) => d.status === 'pending').length,
+      active: data.filter((d:any) => d.status === 'active').length,
+      published: data.filter((d:any) => d.status === 'published').length,
     })
   }
 
   async function approve(id: string) {
-    // Contar activos actuales
     const { data } = await supabase.from('uploads').select('id').eq('status','active')
-    const activeCount = data?.length || 0
-    // Si hay menos de 10 activos → active, si no → approved (cola)
-    const newStatus = activeCount < 10 ? 'active' : 'approved'
+    const newStatus = (data?.length || 0) < 10 ? 'active' : 'approved'
     await supabase.from('uploads').update({status: newStatus}).eq('id', id)
-    fetchUploads(); fetchStats()
-  }
-
-  async function setSchedule(id: string, datetime: string) {
-    await supabase.from('uploads').update({scheduled_at: new Date(datetime).toISOString()}).eq('id', id)
-    fetchUploads()
-  }
-
-  async function moveToActive(id: string) {
-    await supabase.from('uploads').update({status:'active'}).eq('id', id)
     fetchUploads(); fetchStats()
   }
 
@@ -80,9 +53,19 @@ export default function Admin() {
 
   async function deleteUpload(id: string, url: string) {
     const filename = url.split('/').pop()
-    await supabase.storage.from('uploads').remove([filename!])
+    if (filename) await supabase.storage.from('uploads').remove([filename])
     await supabase.from('uploads').delete().eq('id', id)
     fetchUploads(); fetchStats()
+  }
+
+  async function moveToActive(id: string) {
+    await supabase.from('uploads').update({status:'active'}).eq('id', id)
+    fetchUploads(); fetchStats()
+  }
+
+  async function setSchedule(id: string, datetime: string) {
+    await supabase.from('uploads').update({scheduled_at: new Date(datetime).toISOString()}).eq('id', id)
+    fetchUploads()
   }
 
   if (!auth) return (
@@ -92,9 +75,9 @@ export default function Admin() {
         <div style={{fontSize:'22px',fontWeight:900,color:'#fff'}}>Admin Panel</div>
         <input type="password" placeholder="Password" value={input}
           onChange={e => setInput(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && input === PASSWORD && setAuth(true)}
+          onKeyDown={e => e.key === 'Enter' && input === ADMIN_PASSWORD && setAuth(true)}
           style={{padding:'12px',background:'#111',border:'0.5px solid #333',color:'#fff',fontSize:'14px',fontFamily:'Arial'}}/>
-        <button onClick={() => input === PASSWORD && setAuth(true)}
+        <button onClick={() => input === ADMIN_PASSWORD && setAuth(true)}
           style={{background:'#C9A84C',color:'#080808',padding:'14px',fontSize:'12px',fontWeight:900,letterSpacing:'3px',border:'none',cursor:'pointer'}}>
           ENTER
         </button>
@@ -103,7 +86,7 @@ export default function Admin() {
   )
 
   return (
-    <div style={{background:'#080808',minHeight:'100vh',overflowY:'auto',fontFamily:'"Arial Black",Arial,sans-serif',padding:'32px'}}>
+    <div style={{background:'#080808',minHeight:'100vh',fontFamily:'"Arial Black",Arial,sans-serif',padding:'32px',boxSizing:'border-box'}}>
 
       <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'32px',flexWrap:'wrap',gap:'12px'}}>
         <div style={{fontSize:'15px',fontWeight:900,color:'#C9A84C',letterSpacing:'4px'}}>ICONIC SCREEN — ADMIN</div>
@@ -111,7 +94,6 @@ export default function Admin() {
         <button onClick={() => setAuth(false)} style={{background:'transparent',color:'#555',padding:'8px 16px',fontSize:'10px',letterSpacing:'2px',border:'0.5px solid #333',cursor:'pointer'}}>LOGOUT</button>
       </div>
 
-      {/* STATS */}
       <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'16px',marginBottom:'32px'}}>
         {[
           {label:'TOTAL',value:stats.total,color:'#fff'},
@@ -126,7 +108,6 @@ export default function Admin() {
         ))}
       </div>
 
-      {/* TABS */}
       <div style={{display:'flex',gap:'0',marginBottom:'24px',borderBottom:'0.5px solid #222'}}>
         {(['pending','active','published','all'] as const).map(t => (
           <button key={t} onClick={() => setTab(t)}
@@ -136,7 +117,6 @@ export default function Admin() {
         ))}
       </div>
 
-      {/* GRID */}
       <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(300px,1fr))',gap:'16px'}}>
         {uploads.map(u => (
           <div key={u.id} style={{background:'#0f0f0f',border:'0.5px solid #222',overflow:'hidden'}}>
@@ -163,7 +143,6 @@ export default function Admin() {
                 </div>
               )}
 
-              {/* Schedule */}
               {u.status === 'approved' && (
                 <div style={{display:'flex',flexDirection:'column',gap:'6px'}}>
                   <div style={{fontSize:'9px',color:'#555',letterSpacing:'2px'}}>SCHEDULE SLOT</div>
@@ -176,15 +155,27 @@ export default function Admin() {
 
               <div style={{display:'flex',gap:'8px',flexWrap:'wrap'}}>
                 {u.status === 'pending' && (
-                  <button onClick={() => approve(u.id)} style={{flex:1,background:'#C9A84C',color:'#000',padding:'8px',fontSize:'10px',fontWeight:900,letterSpacing:'1px',border:'none',cursor:'pointer'}}>APPROVE</button>
+                  <button onClick={() => approve(u.id)}
+                    style={{flex:1,background:'#C9A84C',color:'#000',padding:'10px',fontSize:'10px',fontWeight:900,letterSpacing:'1px',border:'none',cursor:'pointer'}}>
+                    APPROVE
+                  </button>
                 )}
                 {u.status === 'approved' && (
-                  <button onClick={() => moveToActive(u.id)} style={{flex:1,background:'#C9A84C',color:'#000',padding:'8px',fontSize:'10px',fontWeight:900,letterSpacing:'1px',border:'none',cursor:'pointer'}}>PUT ON SCREEN</button>
+                  <button onClick={() => moveToActive(u.id)}
+                    style={{flex:1,background:'#C9A84C',color:'#000',padding:'10px',fontSize:'10px',fontWeight:900,letterSpacing:'1px',border:'none',cursor:'pointer'}}>
+                    PUT ON SCREEN
+                  </button>
                 )}
                 {u.status !== 'rejected' && u.status !== 'published' && (
-                  <button onClick={() => reject(u.id)} style={{flex:1,background:'transparent',color:'#FF9900',padding:'8px',fontSize:'10px',fontWeight:900,letterSpacing:'1px',border:'0.5px solid #FF9900',cursor:'pointer'}}>REJECT</button>
+                  <button onClick={() => reject(u.id)}
+                    style={{flex:1,background:'transparent',color:'#FF9900',padding:'10px',fontSize:'10px',fontWeight:900,letterSpacing:'1px',border:'1px solid #FF9900',cursor:'pointer'}}>
+                    REJECT
+                  </button>
                 )}
-                <button onClick={() => deleteUpload(u.id, u.url)} style={{background:'transparent',color:'#ff4444',padding:'8px 12px',fontSize:'10px',fontWeight:900,letterSpacing:'1px',border:'0.5px solid #ff4444',cursor:'pointer'}}>DEL</button>
+                <button onClick={() => deleteUpload(u.id, u.url)}
+                  style={{background:'transparent',color:'#ff4444',padding:'10px 14px',fontSize:'10px',fontWeight:900,letterSpacing:'1px',border:'1px solid #ff4444',cursor:'pointer'}}>
+                  DEL
+                </button>
               </div>
             </div>
           </div>
