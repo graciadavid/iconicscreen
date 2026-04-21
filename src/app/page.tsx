@@ -40,28 +40,71 @@ export default function Home() {
     return () => window.removeEventListener('resize', calcScreen)
   }, [])
 
-  return (
-    <main style={{width:'100vw',height:'100vh',overflow:'hidden',position:'relative',fontFamily:'"Arial Black",Arial,sans-serif'}}>
+  if (isMobile) return (
+    <main style={{width:'100vw',minHeight:'100vh',background:'#080808',fontFamily:'"Arial Black",Arial,sans-serif',display:'flex',flexDirection:'column'}}>
 
-      <img ref={imgRef} src="/hero.png" alt="Iconic Screen" onLoad={calcScreen}
-        style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'fill',objectPosition:'center top',zIndex:0}}/>
+      {/* NAV mobile */}
+      <div style={{padding:'12px 20px',display:'flex',justifyContent:'space-between',alignItems:'center',background:'linear-gradient(to bottom,rgba(0,0,0,0.8),transparent)',position:'absolute',top:0,left:0,right:0,zIndex:10}}>
+        <img src="/logo.png" alt="Iconic Screen" style={{height:'44px',objectFit:'contain'}}/>
+        <button onClick={() => setShowModal(true)} style={{background:'#C9A84C',color:'#080808',padding:'8px 16px',fontSize:'10px',fontWeight:900,letterSpacing:'2px',border:'none',cursor:'pointer'}}>GET ON SCREEN</button>
+      </div>
 
-      <Screen style={screenStyle} isMobile={isMobile}/>
-      {!isMobile && <AmazonPanel style={amzStyle}/>}
-      {!isMobile && <ApplePanel style={adsStyle}/>}
+      {/* HERO — sin deformar */}
+      <img src="/hero.png" alt="Iconic Screen"
+        style={{width:'100%',aspectRatio:'16/9',objectFit:'cover',objectPosition:'center',display:'block'}}/>
 
-      <Nav onUpload={() => setShowModal(true)}/>
-
-      <div style={{position:'fixed',bottom:0,left:0,right:0,zIndex:4,padding:isMobile?'16px 20px 24px':'20px 32px 32px',display:'flex',justifyContent:'space-between',alignItems:'flex-end',background:'linear-gradient(to top,rgba(0,0,0,0.95) 60%,transparent)'}}>
+      {/* BOTTOM MOBILE */}
+      <div style={{flex:1,background:'#080808',padding:'24px 20px',display:'flex',flexDirection:'column',gap:'20px'}}>
         <div>
-          <div style={{fontSize:'9px',letterSpacing:'4px',color:'#C9A84C',marginBottom:'6px'}}>THE WORLD&apos;S SCREEN</div>
-          <div style={{fontSize:isMobile?'22px':'clamp(18px,2.5vw,32px)',fontWeight:900,color:'#fff',lineHeight:1.1,letterSpacing:'1px'}}>
+          <div style={{fontSize:'9px',letterSpacing:'4px',color:'#C9A84C',marginBottom:'8px'}}>THE WORLD&apos;S SCREEN</div>
+          <div style={{fontSize:'28px',fontWeight:900,color:'#fff',lineHeight:1.1,letterSpacing:'1px',marginBottom:'4px'}}>
             Your face.<br/><span style={{color:'#C9A84C'}}>The internet&apos;s billboard.</span>
           </div>
         </div>
 
-        <NYClock/>
-        <LiveCounter/>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',borderTop:'0.5px solid #222',borderBottom:'0.5px solid #222',padding:'16px 0'}}>
+          <NYClock/>
+          <LiveCounter/>
+        </div>
+
+        <div style={{display:'flex',flexDirection:'column',gap:'12px'}}>
+          <button onClick={() => setShowModal(true)} style={{background:'#C9A84C',color:'#080808',padding:'16px',fontSize:'12px',fontWeight:900,letterSpacing:'3px',border:'none',cursor:'pointer'}}>GET ON THE SCREEN</button>
+          <button style={{background:'transparent',color:'#C9A84C',padding:'14px',fontSize:'11px',fontWeight:900,letterSpacing:'2px',border:'1px solid #C9A84C',cursor:'pointer'}}>RESERVE YOUR SLOT</button>
+        </div>
+
+        <div style={{fontSize:'11px',color:'#444',fontFamily:'Arial',lineHeight:1.6,textAlign:'center'}}>
+          Free to upload · $9 per hour slot
+        </div>
+      </div>
+
+      {showModal && <UploadModal onClose={() => setShowModal(false)}/>}
+    </main>
+  )
+
+  return (
+    <main style={{width:'100vw',height:'100vh',overflow:'hidden',position:'relative',fontFamily:'"Arial Black",Arial,sans-serif'}}>
+
+      <img ref={imgRef} src="/hero.png" alt="Iconic Screen" onLoad={calcScreen}
+        style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'fill',zIndex:0}}/>
+
+      <Screen style={screenStyle}/>
+      <AmazonPanel style={amzStyle}/>
+      <ApplePanel style={adsStyle}/>
+
+      <Nav onUpload={() => setShowModal(true)}/>
+
+      <div style={{position:'fixed',bottom:0,left:0,right:0,zIndex:4,padding:'20px 32px 32px',display:'flex',justifyContent:'space-between',alignItems:'flex-end',background:'linear-gradient(to top,rgba(0,0,0,0.95) 60%,transparent)'}}>
+        <div>
+          <div style={{fontSize:'9px',letterSpacing:'4px',color:'#C9A84C',marginBottom:'6px'}}>THE WORLD&apos;S SCREEN</div>
+          <div style={{fontSize:'clamp(18px,2.5vw,32px)',fontWeight:900,color:'#fff',lineHeight:1.1,letterSpacing:'1px'}}>
+            Your face.<br/><span style={{color:'#C9A84C'}}>The internet&apos;s billboard.</span>
+          </div>
+        </div>
+
+        <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'4px'}}>
+          <NYClock/>
+          <div style={{marginTop:'8px'}}><LiveCounter/></div>
+        </div>
 
         <div style={{display:'flex',flexDirection:'row',gap:'12px',alignItems:'center'}}>
           <button onClick={() => setShowModal(true)} style={{background:'#C9A84C',color:'#080808',padding:'14px 32px',fontSize:'11px',fontWeight:900,letterSpacing:'3px',border:'none',cursor:'pointer',whiteSpace:'nowrap'}}>GET ON THE SCREEN</button>
