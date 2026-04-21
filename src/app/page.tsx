@@ -102,7 +102,7 @@ export default function Home() {
           style={{position:'fixed',top:amzStyle.top,left:amzStyle.left,width:amzStyle.width,height:amzStyle.height,zIndex:3,display:'flex',alignItems:'flex-end',justifyContent:'center',cursor:'pointer',paddingBottom:'12%'}}
         >
           <div style={{textAlign:'center'}}>
-            <div style={{fontSize:'clamp(10px,1.5vw,18px)',fontWeight:900,color:'#FF9900',animation:'pulse 1.5s infinite',letterSpacing:'3px',animation:'pulse 1.5s ease-in-out infinite'}}>TODAY&apos;S DEALS</div>
+            <div style={{fontSize:'clamp(10px,1.5vw,18px)',fontWeight:900,color:'#FF9900',animation:'pulse 1.5s ease-in-out infinite',letterSpacing:'3px'}}>TODAY&apos;S DEALS</div>
             <div style={{fontSize:'clamp(8px,1vw,12px)',color:'rgba(255,255,255,0.6)',letterSpacing:'2px',marginTop:'8px'}}>CLICK TO SHOP</div>
           </div>
         </div>
