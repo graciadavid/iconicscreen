@@ -21,7 +21,6 @@ export default function Home() {
   const [screenStyle, setScreenStyle] = useState<BoxStyle>(empty)
   const [amzStyle, setAmzStyle] = useState<BoxStyle>(empty)
   const [adsStyle, setAdsStyle] = useState<BoxStyle>(empty)
-  const [navH, setNavH] = useState(0)
   const imgRef = useRef<HTMLImageElement>(null)
   const navRef = useRef<HTMLDivElement>(null)
 
@@ -38,7 +37,6 @@ export default function Home() {
     const mobile = window.innerWidth < 768
     setIsMobile(mobile)
     if (!mobile && imgRef.current) calcOverlays(imgRef.current)
-    if (navRef.current) setNavH(navRef.current.getBoundingClientRect().height)
   }
 
   useEffect(() => {
@@ -87,15 +85,15 @@ export default function Home() {
       {/* NAV DESKTOP */}
       <div ref={navRef} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'10px 32px',background:'#080808',borderBottom:'0.5px solid #1a1a1a',flexShrink:0,zIndex:5}}>
         <img src="/logo.png" alt="Iconic Screen" style={{height:'52px',objectFit:'contain'}}/>
-        <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'4px'}}>
-          <NYClock/>
-          <LiveCounter/>
-        </div>
-        <div>
-          <div style={{fontSize:'9px',letterSpacing:'4px',color:'#C9A84C',marginBottom:'4px',textAlign:'right'}}>THE WORLD&apos;S SCREEN</div>
-          <div style={{fontSize:'clamp(14px,1.8vw,22px)',fontWeight:900,color:'#fff',lineHeight:1.1,textAlign:'right'}}>
-            Your face. <span style={{color:'#C9A84C'}}>The internet&apos;s billboard.</span>
-          </div>
+        <div style={{display:'flex',gap:'12px'}}>
+          <button onClick={() => { setModalMode('free'); setShowModal(true) }}
+            style={{background:'#C9A84C',color:'#080808',padding:'10px 24px',fontSize:'11px',fontWeight:900,letterSpacing:'3px',border:'none',cursor:'pointer',whiteSpace:'nowrap'}}>
+            GET ON THE SCREEN
+          </button>
+          <button onClick={() => { setModalMode('reserve'); setShowModal(true) }}
+            style={{background:'transparent',color:'#C9A84C',padding:'9px 20px',fontSize:'10px',fontWeight:900,letterSpacing:'2px',border:'0.5px solid #C9A84C',cursor:'pointer',whiteSpace:'nowrap'}}>
+            RESERVE YOUR SLOT
+          </button>
         </div>
       </div>
 
@@ -107,16 +105,15 @@ export default function Home() {
         {amzStyle.width > 0 && <AmazonPanel style={amzStyle}/>}
         {adsStyle.width > 0 && <ApplePanel style={adsStyle}/>}
 
-        {/* BOTTOM BUTTONS */}
-        <div style={{position:'absolute',bottom:0,left:0,right:0,zIndex:4,padding:'16px 32px',display:'flex',justifyContent:'flex-end',gap:'12px',background:'linear-gradient(to top,rgba(0,0,0,0.7) 0%,transparent)'}}>
-          <button onClick={() => { setModalMode('free'); setShowModal(true) }}
-            style={{background:'#C9A84C',color:'#080808',padding:'12px 28px',fontSize:'11px',fontWeight:900,letterSpacing:'3px',border:'none',cursor:'pointer',whiteSpace:'nowrap'}}>
-            GET ON THE SCREEN
-          </button>
-          <button onClick={() => { setModalMode('reserve'); setShowModal(true) }}
-            style={{background:'transparent',color:'#C9A84C',padding:'11px 22px',fontSize:'10px',fontWeight:900,letterSpacing:'2px',border:'0.5px solid #C9A84C',cursor:'pointer',whiteSpace:'nowrap'}}>
-            RESERVE YOUR SLOT
-          </button>
+        {/* BOTTOM BAR */}
+        <div style={{position:'absolute',bottom:0,left:0,right:0,zIndex:4,padding:'12px 32px',display:'flex',justifyContent:'space-between',alignItems:'center',background:'linear-gradient(to top,rgba(0,0,0,0.85) 0%,transparent)'}}>
+          <div style={{fontSize:'clamp(14px,1.8vw,22px)',fontWeight:900,color:'#fff',lineHeight:1.1}}>
+            Your face. <span style={{color:'#C9A84C'}}>The internet&apos;s billboard.</span>
+          </div>
+          <div style={{display:'flex',gap:'32px',alignItems:'center'}}>
+            <NYClock/>
+            <LiveCounter/>
+          </div>
         </div>
       </div>
 
