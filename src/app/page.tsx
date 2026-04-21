@@ -82,7 +82,7 @@ export default function Home() {
 
       {/* NAV */}
       <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'10px 32px',background:'#080808',borderBottom:'0.5px solid #1a1a1a',flexShrink:0,zIndex:5}}>
-        <div style={{display:"flex",alignItems:"center",gap:"16px"}}><img src="/logo.png" alt="Iconic Screen" style={{height:"52px",objectFit:"contain"}}/></div>
+        <div style={{display:"flex",alignItems:"center",gap:"16px"}}><img src="/logo.png" alt="Iconic Screen" style={{height:"52px",objectFit:"contain"}}/><LiveCounter small/></div>
         <div style={{fontSize:'clamp(14px,1.5vw,20px)',fontWeight:900,color:'#fff',lineHeight:1.1,textAlign:'center',position:'absolute',left:'50%',transform:'translateX(-50%)',whiteSpace:'nowrap'}}>
           Your face. <span style={{color:'#C9A84C'}}>The internet&apos;s billboard.</span>
         </div>
@@ -109,7 +109,7 @@ export default function Home() {
         {adsStyle.width > 0 && <ApplePanel style={adsStyle}/>}
 
         {/* CLOCK BOTTOM CENTER */}
-        <div style={{position:'absolute',bottom:'16px',left:'50%',transform:'translateX(-50%)',zIndex:4}}>
+        <div style={{position:'absolute',bottom:'48px',left:'50%',transform:'translateX(-50%)',zIndex:4}}>
           <NYClock/><div style={{marginTop:"8px"}}><LiveCounter/></div>
         </div>
       </div>
