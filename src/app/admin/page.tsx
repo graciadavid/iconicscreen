@@ -137,9 +137,9 @@ export default function Admin() {
                 </div>
               </div>
 
-              {u.published_at && (
+              {u.scheduled_at && (
                 <div style={{fontSize:'10px',color:'#00cc66',fontFamily:'Arial'}}>
-                  Published: {new Date(u.published_at).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:true})}
+                  Scheduled (NY): {new Date(u.scheduled_at).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',hour12:true})}
                 </div>
               )}
 
