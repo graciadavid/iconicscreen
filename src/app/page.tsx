@@ -47,7 +47,6 @@ export default function Home() {
         style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:isMobile?'cover':'fill',objectPosition:'center top',zIndex:0}}/>
 
       <Screen style={screenStyle} isMobile={isMobile}/>
-      {isMobile && <Screen style={{top:70,left:0,width:390,height:280}}'''/>}
       {!isMobile && <AmazonPanel style={amzStyle}/>}
       {!isMobile && <ApplePanel style={adsStyle}/>}
 
