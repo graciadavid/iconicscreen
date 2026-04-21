@@ -5,6 +5,7 @@ import { Screen } from '@/components/Screen'
 import { AmazonPanel } from '@/components/AmazonPanel'
 import { ApplePanel } from '@/components/ApplePanel'
 import { LiveCounter } from '@/components/LiveCounter'
+import { NYClock } from '@/components/NYClock'
 import { UploadModal } from '@/components/UploadModal'
 import { ORIG_W, ORIG_H, SCREEN, AMZ, ADS } from '@/lib/constants'
 
@@ -59,6 +60,7 @@ export default function Home() {
           </div>
         </div>
 
+        <NYClock/>
         <LiveCounter/>
 
         <div style={{display:'flex',flexDirection:'row',gap:'12px',alignItems:'center'}}>
