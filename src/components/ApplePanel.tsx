@@ -1,7 +1,7 @@
 'use client'
 
 type Props = {
-  fixed?: boolean  fixed?: boolean
+  fixed?: boolean
   style: {top:number,left:number,width:number,height:number}
 }
 
