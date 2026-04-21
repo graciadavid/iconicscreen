@@ -46,7 +46,7 @@ export default function Home() {
   }, [])
 
   return (
-    <main style={{width:'100vw',background:'#080808',fontFamily:'"Arial Black",Arial,sans-serif'}}>
+    <main style={{width:'100vw',height:isMobile?'auto':'100vh',overflow:isMobile?'visible':'hidden',background:'#080808',fontFamily:'"Arial Black",Arial,sans-serif'}}>
 
       {/* NAV */}
       {/* HERO */}
