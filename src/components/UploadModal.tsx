@@ -11,18 +11,22 @@ export function UploadModal({ onClose }: { onClose: () => void }) {
     const { data } = await supabase
       .from('uploads')
       .select('scheduled_at')
-      .in('status', ['active','approved','pending'])
+      .eq('status', 'queued')
       .order('scheduled_at', {ascending: false})
       .limit(1)
+      .single()
 
-    const last = data?.[0]?.scheduled_at
-    if (last) {
-      const lastDate = new Date(last)
-      lastDate.setMinutes(lastDate.getMinutes() + 1)
-      return lastDate
+    if (data?.scheduled_at) {
+      const last = new Date(data.scheduled_at)
+      last.setMinutes(last.getMinutes() + 1)
+      last.setSeconds(0, 0)
+      return last
     }
-    // Si no hay fotos, empieza ahora
-    return new Date()
+
+    const now = new Date()
+    now.setSeconds(0, 0)
+    now.setMinutes(now.getMinutes() + 1)
+    return now
   }
 
   async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
@@ -40,7 +44,7 @@ export function UploadModal({ onClose }: { onClose: () => void }) {
       const { data: urlData } = supabase.storage.from('uploads').getPublicUrl(filename)
       await supabase.from('uploads').insert({
         url: urlData.publicUrl,
-        status: 'pending',
+        status: 'queued',
         scheduled_at: nextSlot.toISOString()
       })
       setScheduledTime(nextSlot.toLocaleString('en-US', {
@@ -64,8 +68,7 @@ export function UploadModal({ onClose }: { onClose: () => void }) {
         <div style={{fontSize:'18px',fontWeight:900,color:'#fff',lineHeight:1.3}}>Your photo will appear on</div>
         <div style={{fontSize:'22px',fontWeight:900,color:'#C9A84C',lineHeight:1.3}}>{scheduledTime}</div>
         <div style={{fontSize:'11px',color:'#555',letterSpacing:'2px'}}>NEW YORK TIME</div>
-        <button onClick={onClose}
-          style={{background:'#C9A84C',color:'#080808',padding:'14px 32px',fontSize:'12px',fontWeight:900,letterSpacing:'3px',border:'none',cursor:'pointer',width:'100%',marginTop:'8px'}}>
+        <button onClick={onClose} style={{background:'#C9A84C',color:'#080808',padding:'14px 32px',fontSize:'12px',fontWeight:900,letterSpacing:'3px',border:'none',cursor:'pointer',width:'100%',marginTop:'8px'}}>
           AWESOME
         </button>
       </div>
@@ -83,10 +86,7 @@ export function UploadModal({ onClose }: { onClose: () => void }) {
           style={{background:'#C9A84C',color:'#080808',padding:'16px',fontSize:'12px',fontWeight:900,letterSpacing:'3px',border:'none',cursor:'pointer'}}>
           {uploading ? 'UPLOADING...' : 'CHOOSE FILE'}
         </button>
-        <button onClick={onClose}
-          style={{background:'transparent',color:'#555',padding:'12px',fontSize:'11px',letterSpacing:'2px',border:'0.5px solid #333',cursor:'pointer'}}>
-          CANCEL
-        </button>
+        <button onClick={onClose} style={{background:'transparent',color:'#555',padding:'12px',fontSize:'11px',letterSpacing:'2px',border:'0.5px solid #333',cursor:'pointer'}}>CANCEL</button>
       </div>
     </div>
   )

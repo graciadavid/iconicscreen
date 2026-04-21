@@ -2,67 +2,82 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 
 export function useUploads() {
-  const [uploads, setUploads] = useState<{id:string,url:string}[]>([])
-  const [current, setCurrent] = useState(0)
+  const [current, setCurrent] = useState<{id:string,url:string}|null>(null)
 
-  async function fetchUploads() {
+  async function fetchCurrent() {
+    const now = new Date()
+    const minuteStart = new Date(now)
+    minuteStart.setSeconds(0, 0)
+    const minuteEnd = new Date(minuteStart)
+    minuteEnd.setMinutes(minuteEnd.getMinutes() + 1)
+
     const { data } = await supabase
       .from('uploads')
-      .select('id,url,queue_position')
-      .eq('status', 'active')
-      .order('queue_position', {ascending: true, nullsFirst: false})
-      .limit(10)
-    if (data) setUploads(data)
+      .select('id,url')
+      .eq('status', 'queued')
+      .gte('scheduled_at', minuteStart.toISOString())
+      .lt('scheduled_at', minuteEnd.toISOString())
+      .limit(1)
+      .single()
+
+    if (data) setCurrent(data)
+    else setCurrent(null)
   }
 
-  async function rotate() {
-    const { data } = await supabase
+  async function rotateExpired() {
+    const now = new Date()
+    const minuteStart = new Date(now)
+    minuteStart.setSeconds(0, 0)
+
+    const { data: expired } = await supabase
       .from('uploads')
-      .select('id,queue_position')
-      .eq('status', 'active')
-      .order('queue_position', {ascending: true, nullsFirst: false})
+      .select('id')
+      .eq('status', 'queued')
+      .lt('scheduled_at', minuteStart.toISOString())
+
+    if (!expired || expired.length === 0) return
+
+    const { data: last } = await supabase
+      .from('uploads')
+      .select('scheduled_at')
+      .eq('status', 'queued')
+      .order('scheduled_at', {ascending: false})
       .limit(1)
+      .single()
 
-    if (!data || data.length === 0) return
+    const lastSlot = last?.scheduled_at ? new Date(last.scheduled_at) : new Date()
 
-    const first = data[0]
+    for (let i = 0; i < expired.length; i++) {
+      const newSlot = new Date(lastSlot)
+      newSlot.setMinutes(newSlot.getMinutes() + i + 1)
+      await supabase
+        .from('uploads')
+        .update({scheduled_at: newSlot.toISOString(), queue_position: null})
+        .eq('id', expired[i].id)
+    }
 
-    const { data: max } = await supabase
-      .from('uploads')
-      .select('queue_position')
-      .eq('status', 'active')
-      .order('queue_position', {ascending: false})
-      .limit(1)
-
-    const maxPos = max?.[0]?.queue_position || 0
-
-    await supabase
-      .from('uploads')
-      .update({queue_position: maxPos + 1})
-      .eq('id', first.id)
-
-    await fetchUploads()
-    setCurrent(0)
+    await fetchCurrent()
   }
 
   useEffect(() => {
-    fetchUploads()
-  }, [])
-
-  useEffect(() => {
-    if (uploads.length === 0) return
+    rotateExpired()
+    fetchCurrent()
 
     const now = new Date()
-    const msToNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds()
+    const msToNext = (60 - now.getSeconds()) * 1000 - now.getMilliseconds()
 
     const timeout = setTimeout(() => {
-      rotate()
-      const interval = setInterval(rotate, 60000)
+      rotateExpired()
+      fetchCurrent()
+      const interval = setInterval(() => {
+        rotateExpired()
+        fetchCurrent()
+      }, 60000)
       return () => clearInterval(interval)
-    }, msToNextMinute)
+    }, msToNext)
 
     return () => clearTimeout(timeout)
-  }, [uploads])
+  }, [])
 
-  return { uploads, current }
+  return { current }
 }
