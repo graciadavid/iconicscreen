@@ -14,6 +14,7 @@ export default function Home() {
   const imgRef = useRef<HTMLImageElement>(null)
   const [screenStyle, setScreenStyle] = useState({top:0,left:0,width:0,height:0})
   const [amzStyle, setAmzStyle] = useState({top:0,left:0,width:0,height:0})
+  const [adsStyle, setAdsStyle] = useState({top:0,left:0,width:0,height:0})
 
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -30,6 +31,10 @@ export default function Home() {
   const AMZ_Y1 = 117
   const AMZ_X2 = 1197
   const AMZ_Y2 = 414
+  const ADS_X1 = 148
+  const ADS_Y1 = 173
+  const ADS_X2 = 386
+  const ADS_Y2 = 400
 
   function calcScreen() {
     const mobile = window.innerWidth < 768
@@ -42,6 +47,7 @@ export default function Home() {
     const scaleY = r.height / ORIG_H
     setScreenStyle({left:SCREEN_X1*scaleX,top:SCREEN_Y1*scaleY,width:(SCREEN_X2-SCREEN_X1)*scaleX,height:(SCREEN_Y2-SCREEN_Y1)*scaleY})
     setAmzStyle({left:AMZ_X1*scaleX,top:AMZ_Y1*scaleY,width:(AMZ_X2-AMZ_X1)*scaleX,height:(AMZ_Y2-AMZ_Y1)*scaleY})
+    setAdsStyle({left:ADS_X1*scaleX,top:ADS_Y1*scaleY,width:(ADS_X2-ADS_X1)*scaleX,height:(ADS_Y2-ADS_Y1)*scaleY})
   }
 
   useEffect(() => {
@@ -99,6 +105,7 @@ export default function Home() {
       <img ref={imgRef} src="/hero.png" alt="Iconic Screen" onLoad={calcScreen}
         style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:isMobile?'cover':'fill',objectPosition:'center top',zIndex:0}}/>
 
+      {/* PANTALLA CENTRAL */}
       {!isMobile && screenStyle.width > 0 && (
         <div style={{position:'fixed',top:screenStyle.top,left:screenStyle.left,width:screenStyle.width,height:screenStyle.height,zIndex:3,overflow:'hidden',background:'#000'}}>
           {currentUpload && <img src={currentUpload.url} alt="on screen" style={{width:'100%',height:'100%',objectFit:'cover'}}/>}
@@ -111,14 +118,26 @@ export default function Home() {
         </div>
       )}
 
+      {/* AMAZON */}
       {!isMobile && amzStyle.width > 0 && (
-        <div
-          onClick={() => window.open('https://www.amazon.com/deals?tag=nys0b-20', '_blank')}
-          style={{position:'fixed',top:amzStyle.top,left:amzStyle.left,width:amzStyle.width,height:amzStyle.height,zIndex:3,display:'flex',alignItems:'flex-end',justifyContent:'center',cursor:'pointer',paddingBottom:'4%'}}
-        >
+        <div onClick={() => window.open('https://www.amazon.com/deals?tag=nys0b-20', '_blank')}
+          style={{position:'fixed',top:amzStyle.top,left:amzStyle.left,width:amzStyle.width,height:amzStyle.height,zIndex:3,display:'flex',alignItems:'flex-end',justifyContent:'center',cursor:'pointer',paddingBottom:'4%'}}>
           <div style={{textAlign:'center'}}>
             <div style={{fontSize:'clamp(10px,1.5vw,18px)',fontWeight:900,color:'#FF9900',letterSpacing:'3px',animation:'pulse 1.5s ease-in-out infinite'}}>TODAY&apos;S DEALS</div>
             <div style={{fontSize:'clamp(8px,1vw,12px)',color:'#ffffff',letterSpacing:'2px',marginTop:'8px'}}>CLICK TO SHOP</div>
+          </div>
+        </div>
+      )}
+
+      {/* APPLE AD — encima de AdSense */}
+      {!isMobile && adsStyle.width > 0 && (
+        <div style={{position:'fixed',top:adsStyle.top,left:adsStyle.left,width:adsStyle.width,height:adsStyle.height,zIndex:3,display:'flex',alignItems:'center',justifyContent:'center',background:'rgba(255,255,255,0.92)'}}>
+          <div style={{textAlign:'center',display:'flex',flexDirection:'column',alignItems:'center',gap:'6px'}}>
+            <svg width="40" height="48" viewBox="0 0 814 1000" fill="#000">
+              <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 790.7 0 663 0 541.8c0-207.8 135.4-317.8 268.9-317.8 71 0 130 46.4 174.4 46.4 42.6 0 109.2-49.9 189.5-49.9 30.5 0 108.2 2.6 168.1 80.6zm-126.7-85.4c-5.2-31.2-16.7-62.9-41-89.2-31.5-34.8-83.5-58.7-132.1-58.7-3.2 0-6.5.3-9.7.6 1.9 32.4 13.8 63.7 37.4 92.7 27.3 33.1 72.5 60.8 145.4 60.8z"/>
+            </svg>
+            <div style={{fontSize:'clamp(8px,1vw,13px)',fontWeight:900,color:'#000',letterSpacing:'2px'}}>Think Different.</div>
+            <div style={{fontSize:'clamp(7px,0.8vw,10px)',color:'#555',letterSpacing:'1px'}}>apple.com</div>
           </div>
         </div>
       )}
@@ -135,11 +154,10 @@ export default function Home() {
           <div style={{fontSize:isMobile?'22px':'clamp(18px,2.5vw,32px)',fontWeight:900,color:'#fff',lineHeight:1.1,letterSpacing:'1px'}}>Your face.<br/><span style={{color:'#C9A84C'}}>The internet&apos;s billboard.</span></div>
         </div>
 
-        {/* LIVE COUNTER */}
         <div style={{textAlign:'center',display:'flex',flexDirection:'column',alignItems:'center',gap:'4px'}}>
           <div style={{display:'flex',alignItems:'center',gap:'8px'}}>
             <div style={{width:'8px',height:'8px',borderRadius:'50%',background:'#ff4444',animation:'pulse 1s ease-in-out infinite'}}/>
-            <div style={{fontSize:'clamp(18px,2vw,28px)',fontWeight:900,color:'#ffffff',letterSpacing:'2px',fontVariantNumeric:'tabular-nums'}}>
+            <div style={{fontSize:'clamp(18px,2vw,28px)',fontWeight:900,color:'#ffffff',letterSpacing:'2px'}}>
               {viewers.toLocaleString('en-US')}
             </div>
           </div>
