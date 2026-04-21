@@ -1,6 +1,7 @@
 'use client'
 import { useRef, useState } from 'react'
-import { getNextFreeSlot } from '@/lib/getNextSlot'import { supabase } from '@/lib/supabase'
+import { getNextFreeSlot } from '@/lib/getNextSlot'
+import { supabase } from '@/lib/supabase'
 
 type Mode = 'free' | 'reserve'
 
