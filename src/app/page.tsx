@@ -49,10 +49,6 @@ export default function Home() {
     <main style={{width:'100vw',background:'#080808',fontFamily:'"Arial Black",Arial,sans-serif'}}>
 
       {/* NAV */}
-      <nav style={{background:'#080808',padding:'14px 20px',display:'flex',justifyContent:'center',alignItems:'center',borderBottom:'0.5px solid #1a1a1a',position:'relative',zIndex:10}}>
-        <Image src="/logo.png" alt="Iconic Screen" width={isMobile?160:200} height={isMobile?60:75} style={{objectFit:'contain'}}/>
-      </nav>
-
       {/* HERO */}
       {isMobile ? (
         <div style={{position:'relative',width:'100%'}}>
