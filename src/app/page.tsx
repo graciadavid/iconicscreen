@@ -3,7 +3,9 @@ import { useState, useEffect, useRef } from 'react'
 import { Screen } from '@/components/Screen'
 import { AmazonPanel } from '@/components/AmazonPanel'
 import { ApplePanel } from '@/components/ApplePanel'
-import { LiveCounter } from '@/components/LiveCounter'
+import { ScreenMobile } from "@/components/ScreenMobile"
+import { AmazonMobile } from "@/components/AmazonMobile"
+import { AppleMobile } from "@/components/AppleMobile"import { LiveCounter } from '@/components/LiveCounter'
 import { NYClock } from '@/components/NYClock'
 import { UploadModal } from '@/components/UploadModal'
 import { ORIG_W, ORIG_H, SCREEN, AMZ, ADS } from '@/lib/constants'
@@ -55,9 +57,9 @@ export default function Home() {
       <div style={{position:'relative',width:'100%'}}>
         <img ref={imgRef} src="/hero.png" alt="Iconic Screen" onLoad={calcScreen}
           style={{width:'100%',display:'block'}}/>
-        {screenStyle.width > 0 && <Screen style={screenStyle} fixed={false}/>}
-        {amzStyle.width > 0 && <AmazonPanel style={amzStyle} fixed={false}/>}
-        {adsStyle.width > 0 && <ApplePanel style={adsStyle} fixed={false}/>}
+        <ScreenMobile/>
+        <AmazonMobile/>
+        <AppleMobile/>
       </div>
 
       {/* RELOJ Y COUNTER */}
