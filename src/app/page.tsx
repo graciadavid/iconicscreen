@@ -9,6 +9,7 @@ export default function Home() {
   const [showModal, setShowModal] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [viewers, setViewers] = useState(158218)
   const fileRef = useRef<HTMLInputElement>(null)
   const imgRef = useRef<HTMLImageElement>(null)
   const [screenStyle, setScreenStyle] = useState({top:0,left:0,width:0,height:0})
@@ -48,6 +49,20 @@ export default function Home() {
     calcScreen()
     window.addEventListener('resize', calcScreen)
     return () => window.removeEventListener('resize', calcScreen)
+  }, [])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setViewers(v => {
+        const rand = Math.random()
+        let delta
+        if (rand < 0.5) delta = Math.floor(Math.random() * 5) + 1
+        else if (rand < 0.8) delta = -(Math.floor(Math.random() * 3) + 1)
+        else delta = Math.floor(Math.random() * 8) + 3
+        return v + delta
+      })
+    }, 1000)
+    return () => clearInterval(interval)
   }, [])
 
   useEffect(() => {
@@ -108,18 +123,30 @@ export default function Home() {
         </div>
       )}
 
-      {/* NAV — solo logo */}
+      {/* NAV */}
       <nav style={{position:'relative',zIndex:4,display:'flex',justifyContent:'flex-start',alignItems:'center',padding:'12px 32px',background:'linear-gradient(to bottom,rgba(0,0,0,0.6),transparent)'}}>
-        <Image src="/logo.png" alt="Iconic Screen" width={isMobile?100:140} height={isMobile?38:52} style={{objectFit:'contain'}}/>
+        <Image src="/logo.png" alt="Iconic Screen" width={isMobile?120:200} height={isMobile?45:75} style={{objectFit:'contain'}}/>
       </nav>
 
-      {/* COPY + CTA */}
+      {/* BOTTOM BAR */}
       <div style={{position:'fixed',bottom:0,left:0,right:0,zIndex:4,padding:isMobile?'16px 20px 24px':'20px 32px 32px',display:'flex',justifyContent:'space-between',alignItems:'flex-end',background:'linear-gradient(to top,rgba(0,0,0,0.95) 60%,transparent)'}}>
         <div>
           <div style={{fontSize:'9px',letterSpacing:'4px',color:'#C9A84C',marginBottom:'6px'}}>THE WORLD&apos;S SCREEN</div>
           <div style={{fontSize:isMobile?'22px':'clamp(18px,2.5vw,32px)',fontWeight:900,color:'#fff',lineHeight:1.1,letterSpacing:'1px'}}>Your face.<br/><span style={{color:'#C9A84C'}}>The internet&apos;s billboard.</span></div>
         </div>
-        <div style={{display:'flex',flexDirection:'row',gap:'12px',alignItems:'center',marginLeft:'32px'}}>
+
+        {/* LIVE COUNTER */}
+        <div style={{textAlign:'center',display:'flex',flexDirection:'column',alignItems:'center',gap:'4px'}}>
+          <div style={{display:'flex',alignItems:'center',gap:'8px'}}>
+            <div style={{width:'8px',height:'8px',borderRadius:'50%',background:'#ff4444',animation:'pulse 1s ease-in-out infinite'}}/>
+            <div style={{fontSize:'clamp(18px,2vw,28px)',fontWeight:900,color:'#ffffff',letterSpacing:'2px',fontVariantNumeric:'tabular-nums'}}>
+              {viewers.toLocaleString('en-US')}
+            </div>
+          </div>
+          <div style={{fontSize:'10px',color:'rgba(255,255,255,0.5)',letterSpacing:'3px'}}>WATCHING LIVE NOW</div>
+        </div>
+
+        <div style={{display:'flex',flexDirection:'row',gap:'12px',alignItems:'center'}}>
           <button onClick={() => setShowModal(true)} style={{background:'#C9A84C',color:'#080808',padding:'14px 32px',fontSize:'11px',fontWeight:900,letterSpacing:'3px',border:'none',cursor:'pointer',whiteSpace:'nowrap'}}>GET ON THE SCREEN</button>
           <button style={{background:'transparent',color:'#C9A84C',padding:'13px 24px',fontSize:'10px',fontWeight:900,letterSpacing:'2px',border:'0.5px solid #C9A84C',cursor:'pointer',whiteSpace:'nowrap'}}>RESERVE YOUR SLOT</button>
         </div>
