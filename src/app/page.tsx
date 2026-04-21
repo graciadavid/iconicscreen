@@ -46,7 +46,6 @@ export default function Home() {
       {/* NAV mobile */}
       <div style={{padding:'12px 20px',display:'flex',justifyContent:'space-between',alignItems:'center',background:'linear-gradient(to bottom,rgba(0,0,0,0.8),transparent)',position:'absolute',top:0,left:0,right:0,zIndex:10}}>
         <img src="/logo.png" alt="Iconic Screen" style={{height:'44px',objectFit:'contain'}}/>
-        <button onClick={() => setShowModal(true)} style={{background:'#C9A84C',color:'#080808',padding:'8px 16px',fontSize:'10px',fontWeight:900,letterSpacing:'2px',border:'none',cursor:'pointer'}}>GET ON SCREEN</button>
       </div>
 
       {/* HERO — sin deformar */}
