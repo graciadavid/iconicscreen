@@ -85,7 +85,7 @@ export default function Admin() {
   )
 
   return (
-    <div style={{background:'#080808',minHeight:'100vh',fontFamily:'"Arial Black",Arial,sans-serif',padding:'32px'}}>
+    <div style={{background:'#080808',minHeight:'100vh',overflowY:'auto',fontFamily:'"Arial Black",Arial,sans-serif',padding:'32px'}}>
 
       <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'32px'}}>
         <div style={{fontSize:'15px',fontWeight:900,color:'#C9A84C',letterSpacing:'4px'}}>ICONIC SCREEN — ADMIN</div>
