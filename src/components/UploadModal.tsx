@@ -1,6 +1,6 @@
 'use client'
 import { useRef, useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import { getNextFreeSlot } from '@/lib/getNextSlot'import { supabase } from '@/lib/supabase'
 
 type Mode = 'free' | 'reserve'
 
@@ -14,7 +14,7 @@ export function UploadModal({ onClose, mode = 'free' }: { onClose: () => void, m
   const [reserveMin, setReserveMin] = useState('00')
   const fileRef = useRef<HTMLInputElement>(null)
 
-  async function getNextSlot(): Promise<Date> {
+  // use shared helper
     const now = new Date()
     now.setSeconds(0,0)
     now.setMinutes(now.getMinutes() + 1)
@@ -52,7 +52,7 @@ export function UploadModal({ onClose, mode = 'free' }: { onClose: () => void, m
     if (!file) return
     setUploading(true)
 
-    const slot = mode === 'reserve' ? await getReserveSlot() : await getNextSlot()
+    const slot = mode === 'reserve' ? await getReserveSlot() : await getNextFreeSlot()
     if (!slot) { setUploading(false); return }
 
     const filename = `${Date.now()}.${file.name.split('.').pop()}`
