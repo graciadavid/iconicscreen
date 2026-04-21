@@ -22,15 +22,14 @@ export default function Home() {
   const [amzStyle, setAmzStyle] = useState<BoxStyle>(empty)
   const [adsStyle, setAdsStyle] = useState<BoxStyle>(empty)
   const imgRef = useRef<HTMLImageElement>(null)
-  const navRef = useRef<HTMLDivElement>(null)
 
   function calcOverlays(img: HTMLImageElement) {
     const r = img.getBoundingClientRect()
     const sx = r.width / ORIG_W
     const sy = r.height / ORIG_H
-    setScreenStyle({left:SCREEN.X1*sx,top:SCREEN.Y1*sy,width:(SCREEN.X2-SCREEN.X1)*sx,height:(SCREEN.Y2-SCREEN.Y1)*sy})
-    setAmzStyle({left:AMZ.X1*sx,top:AMZ.Y1*sy,width:(AMZ.X2-AMZ.X1)*sx,height:(AMZ.Y2-AMZ.Y1)*sy})
-    setAdsStyle({left:ADS.X1*sx,top:ADS.Y1*sy,width:(ADS.X2-ADS.X1)*sx,height:(ADS.Y2-ADS.Y1)*sy})
+    setScreenStyle({left:r.left+SCREEN.X1*sx,top:r.top+SCREEN.Y1*sy,width:(SCREEN.X2-SCREEN.X1)*sx,height:(SCREEN.Y2-SCREEN.Y1)*sy})
+    setAmzStyle({left:r.left+AMZ.X1*sx,top:r.top+AMZ.Y1*sy,width:(AMZ.X2-AMZ.X1)*sx,height:(AMZ.Y2-AMZ.Y1)*sy})
+    setAdsStyle({left:r.left+ADS.X1*sx,top:r.top+ADS.Y1*sy,width:(ADS.X2-ADS.X1)*sx,height:(ADS.Y2-ADS.Y1)*sy})
   }
 
   function calcScreen() {
@@ -51,8 +50,7 @@ export default function Home() {
         <img src="/logo.png" alt="Iconic Screen" style={{height:'50px',objectFit:'contain'}}/>
       </div>
       <div style={{position:'relative',width:'100%'}}>
-        <img src="/hero.png" alt="Iconic Screen"
-          style={{width:'100%',display:'block'}}/>
+        <img src="/hero.png" alt="Iconic Screen" style={{width:'100%',display:'block'}}/>
         <ScreenMobile/>
         <AmazonMobile/>
         <AppleMobile/>
@@ -82,18 +80,24 @@ export default function Home() {
   return (
     <main style={{width:'100vw',height:'100vh',overflow:'hidden',display:'flex',flexDirection:'column',fontFamily:'"Arial Black",Arial,sans-serif',background:'#080808'}}>
 
-      {/* NAV DESKTOP */}
-      <div ref={navRef} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'10px 32px',background:'#080808',borderBottom:'0.5px solid #1a1a1a',flexShrink:0,zIndex:5}}>
+      {/* NAV */}
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'10px 32px',background:'#080808',borderBottom:'0.5px solid #1a1a1a',flexShrink:0,zIndex:5}}>
         <img src="/logo.png" alt="Iconic Screen" style={{height:'52px',objectFit:'contain'}}/>
-        <div style={{display:'flex',gap:'12px'}}>
-          <button onClick={() => { setModalMode('free'); setShowModal(true) }}
-            style={{background:'#C9A84C',color:'#080808',padding:'10px 24px',fontSize:'11px',fontWeight:900,letterSpacing:'3px',border:'none',cursor:'pointer',whiteSpace:'nowrap'}}>
-            GET ON THE SCREEN
-          </button>
-          <button onClick={() => { setModalMode('reserve'); setShowModal(true) }}
-            style={{background:'transparent',color:'#C9A84C',padding:'9px 20px',fontSize:'10px',fontWeight:900,letterSpacing:'2px',border:'0.5px solid #C9A84C',cursor:'pointer',whiteSpace:'nowrap'}}>
-            RESERVE YOUR SLOT
-          </button>
+        <div style={{fontSize:'clamp(14px,1.5vw,20px)',fontWeight:900,color:'#fff',lineHeight:1.1,textAlign:'center'}}>
+          Your face. <span style={{color:'#C9A84C'}}>The internet&apos;s billboard.</span>
+        </div>
+        <div style={{display:'flex',alignItems:'center',gap:'20px'}}>
+          <LiveCounter/>
+          <div style={{display:'flex',gap:'10px'}}>
+            <button onClick={() => { setModalMode('free'); setShowModal(true) }}
+              style={{background:'#C9A84C',color:'#080808',padding:'10px 20px',fontSize:'10px',fontWeight:900,letterSpacing:'2px',border:'none',cursor:'pointer',whiteSpace:'nowrap'}}>
+              GET ON THE SCREEN
+            </button>
+            <button onClick={() => { setModalMode('reserve'); setShowModal(true) }}
+              style={{background:'transparent',color:'#C9A84C',padding:'9px 16px',fontSize:'10px',fontWeight:900,letterSpacing:'2px',border:'0.5px solid #C9A84C',cursor:'pointer',whiteSpace:'nowrap'}}>
+              RESERVE YOUR SLOT
+            </button>
+          </div>
         </div>
       </div>
 
@@ -105,15 +109,9 @@ export default function Home() {
         {amzStyle.width > 0 && <AmazonPanel style={amzStyle}/>}
         {adsStyle.width > 0 && <ApplePanel style={adsStyle}/>}
 
-        {/* BOTTOM BAR */}
-        <div style={{position:'absolute',bottom:0,left:0,right:0,zIndex:4,padding:'12px 32px',display:'flex',justifyContent:'space-between',alignItems:'center',background:'linear-gradient(to top,rgba(0,0,0,0.85) 0%,transparent)'}}>
-          <div style={{fontSize:'clamp(14px,1.8vw,22px)',fontWeight:900,color:'#fff',lineHeight:1.1}}>
-            Your face. <span style={{color:'#C9A84C'}}>The internet&apos;s billboard.</span>
-          </div>
-          <div style={{display:'flex',gap:'32px',alignItems:'center'}}>
-            <NYClock/>
-            <LiveCounter/>
-          </div>
+        {/* CLOCK BOTTOM CENTER */}
+        <div style={{position:'absolute',bottom:'16px',left:'50%',transform:'translateX(-50%)',zIndex:4}}>
+          <NYClock/>
         </div>
       </div>
 
