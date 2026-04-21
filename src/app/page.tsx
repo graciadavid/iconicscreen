@@ -103,7 +103,7 @@ export default function Home() {
         >
           <div style={{textAlign:'center'}}>
             <div style={{fontSize:'clamp(10px,1.5vw,18px)',fontWeight:900,color:'#FF9900',animation:'pulse 1.5s ease-in-out infinite',letterSpacing:'3px'}}>TODAY&apos;S DEALS</div>
-            <div style={{fontSize:'clamp(8px,1vw,12px)',color:'rgba(255,255,255,0.6)',letterSpacing:'2px',marginTop:'8px'}}>CLICK TO SHOP</div>
+            <div style={{fontSize:'clamp(8px,1vw,12px)',color:'#ffffff',letterSpacing:'2px',marginTop:'16px'}}>CLICK TO SHOP</div>
           </div>
         </div>
       )}
