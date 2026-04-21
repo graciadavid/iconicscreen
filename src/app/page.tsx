@@ -5,7 +5,8 @@ import { AmazonPanel } from '@/components/AmazonPanel'
 import { ApplePanel } from '@/components/ApplePanel'
 import { ScreenMobile } from "@/components/ScreenMobile"
 import { AmazonMobile } from "@/components/AmazonMobile"
-import { AppleMobile } from "@/components/AppleMobile"import { LiveCounter } from '@/components/LiveCounter'
+import { AppleMobile } from "@/components/AppleMobile"
+import { LiveCounter } from '@/components/LiveCounter'
 import { NYClock } from '@/components/NYClock'
 import { UploadModal } from '@/components/UploadModal'
 import { ORIG_W, ORIG_H, SCREEN, AMZ, ADS } from '@/lib/constants'
