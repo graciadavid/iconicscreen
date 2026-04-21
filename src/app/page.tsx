@@ -69,7 +69,7 @@ export default function Home() {
 
         <div style={{display:'flex',flexDirection:'column',gap:'12px'}}>
           <button onClick={() => { setModalMode("free"); setShowModal(true) }} style={{background:'#C9A84C',color:'#080808',padding:'16px',fontSize:'12px',fontWeight:900,letterSpacing:'3px',border:'none',cursor:'pointer'}}>GET ON THE SCREEN</button>
-          <button style={{background:'transparent',color:'#C9A84C',padding:'14px',fontSize:'11px',fontWeight:900,letterSpacing:'2px',border:'1px solid #C9A84C',cursor:'pointer'}}>RESERVE YOUR SLOT</button>
+          <button onClick={() => { setModalMode("reserve"); setShowModal(true) }} style={{background:'transparent',color:'#C9A84C',padding:'14px',fontSize:'11px',fontWeight:900,letterSpacing:'2px',border:'1px solid #C9A84C',cursor:'pointer'}}>RESERVE YOUR SLOT</button>
         </div>
 
         <div style={{fontSize:'11px',color:'#444',fontFamily:'Arial',lineHeight:1.6,textAlign:'center'}}>
@@ -108,7 +108,7 @@ export default function Home() {
 
         <div style={{display:'flex',flexDirection:'row',gap:'12px',alignItems:'center'}}>
           <button onClick={() => { setModalMode("free"); setShowModal(true) }} style={{background:'#C9A84C',color:'#080808',padding:'14px 32px',fontSize:'11px',fontWeight:900,letterSpacing:'3px',border:'none',cursor:'pointer',whiteSpace:'nowrap'}}>GET ON THE SCREEN</button>
-          <button style={{background:'transparent',color:'#C9A84C',padding:'13px 24px',fontSize:'10px',fontWeight:900,letterSpacing:'2px',border:'0.5px solid #C9A84C',cursor:'pointer',whiteSpace:'nowrap'}}>RESERVE YOUR SLOT</button>
+          <button onClick={() => { setModalMode("reserve"); setShowModal(true) }} style={{background:'transparent',color:'#C9A84C',padding:'13px 24px',fontSize:'10px',fontWeight:900,letterSpacing:'2px',border:'0.5px solid #C9A84C',cursor:'pointer',whiteSpace:'nowrap'}}>RESERVE YOUR SLOT</button>
         </div>
       </div>
 
