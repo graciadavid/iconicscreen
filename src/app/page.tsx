@@ -110,7 +110,7 @@ export default function Home() {
 
         {/* CLOCK BOTTOM CENTER */}
         <div style={{position:'absolute',bottom:'48px',left:'50%',transform:'translateX(-50%)',zIndex:4}}>
-          <NYClock/><div style={{marginTop:"8px"}}><LiveCounter/></div>
+          <NYClock/>
         </div>
       </div>
 
