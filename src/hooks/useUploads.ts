@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
-import { ROTATION_MS } from '@/lib/constants'
 
 export function useUploads() {
   const [uploads, setUploads] = useState<{id:string,url:string}[]>([])
@@ -17,23 +16,41 @@ export function useUploads() {
     if (data) setUploads(data)
   }
 
+  async function rotateCurrent(current: number, uploads: {id:string,url:string}[]) {
+    if (uploads.length === 0) return
+    const done = uploads[current]
+    await supabase
+      .from('uploads')
+      .update({status:'published', published_at: new Date().toISOString()})
+      .eq('id', done.id)
+    await fetchUploads()
+    setCurrent(0)
+  }
+
   useEffect(() => {
     fetchUploads()
   }, [])
 
   useEffect(() => {
     if (uploads.length === 0) return
-    const t = setInterval(async () => {
-      const done = uploads[current]
-      await supabase
-        .from('uploads')
-        .update({status:'published', published_at: new Date().toISOString()})
-        .eq('id', done.id)
-      await fetchUploads()
-      setCurrent(0)
-    }, ROTATION_MS)
-    return () => clearInterval(t)
-  }, [uploads, current])
+
+    // Espera al segundo :00 del próximo minuto
+    const now = new Date()
+    const msToNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds()
+
+    const timeout = setTimeout(() => {
+      rotateCurrent(current, uploads)
+
+      // A partir de aquí cada 60 segundos exactos
+      const interval = setInterval(() => {
+        rotateCurrent(current, uploads)
+      }, 60000)
+
+      return () => clearInterval(interval)
+    }, msToNextMinute)
+
+    return () => clearTimeout(timeout)
+  }, [uploads])
 
   return { uploads, current }
 }
