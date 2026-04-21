@@ -1,6 +1,13 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#080808}
-html, body{height:100%}
+
+@media (min-width: 768px) {
+  html, body {
+    overflow: hidden;
+    height: 100%;
+  }
+}
+
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.3; }
