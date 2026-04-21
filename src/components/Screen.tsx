@@ -3,16 +3,41 @@ import { useUploads } from '@/hooks/useUploads'
 
 type Props = {
   style: {top:number,left:number,width:number,height:number}
+  isMobile?: boolean
 }
 
-export function Screen({ style }: Props) {
+export function Screen({ style, isMobile }: Props) {
   const { uploads, current } = useUploads()
   const currentUpload = uploads[current]
 
-  if (style.width === 0) return null
+  const mobileStyle = {
+    position:'fixed' as const,
+    top:'70px',
+    left:'50%',
+    transform:'translateX(-50%)',
+    width:'90vw',
+    height:'50vw',
+    zIndex:3,
+    overflow:'hidden',
+    background:'#000',
+    border:'2px solid #C9A84C'
+  }
+
+  const desktopStyle = {
+    position:'fixed' as const,
+    top:style.top,
+    left:style.left,
+    width:style.width,
+    height:style.height,
+    zIndex:3,
+    overflow:'hidden',
+    background:'#000'
+  }
+
+  if (!isMobile && style.width === 0) return null
 
   return (
-    <div style={{position:'fixed',top:style.top,left:style.left,width:style.width,height:style.height,zIndex:3,overflow:'hidden',background:'#000'}}>
+    <div style={isMobile ? mobileStyle : desktopStyle}>
       {currentUpload && (
         <img src={currentUpload.url} alt="on screen" style={{width:'100%',height:'100%',objectFit:'cover'}}/>
       )}
