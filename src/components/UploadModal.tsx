@@ -15,30 +15,6 @@ export function UploadModal({ onClose, mode = 'free' }: { onClose: () => void, m
   const [reserveMin, setReserveMin] = useState('00')
   const fileRef = useRef<HTMLInputElement>(null)
 
-  // use shared helper
-    const now = new Date()
-    now.setSeconds(0,0)
-    now.setMinutes(now.getMinutes() + 1)
-    const { data } = await supabase
-      .from("uploads")
-      .select("scheduled_at")
-      .eq("status","queued")
-      .gte("scheduled_at", now.toISOString())
-      .order("scheduled_at", {ascending:true})
-    if (!data || data.length === 0) return now
-    const slots = data.map((d: any) => new Date(d.scheduled_at).getTime())
-    let candidate = now.getTime()
-    for (const slot of slots) {
-      if (Math.abs(slot - candidate) < 30000) {
-        candidate += 60000
-      } else if (slot > candidate) {
-        break
-      }
-    }
-    const result = new Date(candidate)
-    result.setSeconds(0,0)
-    return result
-  }
   async function getReserveSlot(): Promise<Date|null> {
     if (!reserveDate || !reserveHour) return null
     const [year, month, day] = reserveDate.split('-').map(Number)
