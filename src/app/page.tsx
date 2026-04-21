@@ -52,7 +52,7 @@ export default function Home() {
       </div>
 
       {/* HERO — zoom in para ver edificios de cerca */}
-      <div style={{position:'relative',width:'120%',marginLeft:'-10%',overflow:'hidden'}}>
+      <div style={{position:'relative',width:'100%'}}>
         <img ref={imgRef} src="/hero.png" alt="Iconic Screen" onLoad={calcScreen}
           style={{width:'100%',display:'block'}}/>
         {screenStyle.width > 0 && <Screen style={screenStyle} fixed={false}/>}
@@ -65,7 +65,10 @@ export default function Home() {
         <NYClock/>
         <LiveCounter/>
       </div>
-
+      <div style={{padding:"16px 20px 8px",textAlign:"center"}}>
+        <div style={{fontSize:"9px",letterSpacing:"4px",color:"#C9A84C",marginBottom:"6px"}}>THE WORLD'S SCREEN</div>
+        <div style={{fontSize:"22px",fontWeight:900,color:"#fff",lineHeight:1.1}}>Your face.<br/><span style={{color:"#C9A84C"}}>The internet's billboard.</span></div>
+      </div>
       {/* BOTTOM BAR DORADO */}
       <div style={{position:'fixed',bottom:0,left:0,right:0,zIndex:10,background:'#C9A84C',padding:'12px 16px',display:'flex',gap:'10px'}}>
         <button onClick={() => { setModalMode('free'); setShowModal(true) }}
