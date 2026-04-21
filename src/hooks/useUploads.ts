@@ -8,21 +8,39 @@ export function useUploads() {
   async function fetchUploads() {
     const { data } = await supabase
       .from('uploads')
-      .select('id,url')
+      .select('id,url,queue_position')
       .eq('status', 'active')
-      .order('slot_order', {ascending: true, nullsFirst: false})
-      .order('created_at', {ascending: true})
+      .order('queue_position', {ascending: true, nullsFirst: false})
       .limit(10)
     if (data) setUploads(data)
   }
 
-  async function rotateCurrent(current: number, uploads: {id:string,url:string}[]) {
-    if (uploads.length === 0) return
-    const done = uploads[current]
+  async function rotate() {
+    const { data } = await supabase
+      .from('uploads')
+      .select('id,queue_position')
+      .eq('status', 'active')
+      .order('queue_position', {ascending: true, nullsFirst: false})
+      .limit(1)
+
+    if (!data || data.length === 0) return
+
+    const first = data[0]
+
+    const { data: max } = await supabase
+      .from('uploads')
+      .select('queue_position')
+      .eq('status', 'active')
+      .order('queue_position', {ascending: false})
+      .limit(1)
+
+    const maxPos = max?.[0]?.queue_position || 0
+
     await supabase
       .from('uploads')
-      .update({status:'published', published_at: new Date().toISOString()})
-      .eq('id', done.id)
+      .update({queue_position: maxPos + 1})
+      .eq('id', first.id)
+
     await fetchUploads()
     setCurrent(0)
   }
@@ -34,18 +52,12 @@ export function useUploads() {
   useEffect(() => {
     if (uploads.length === 0) return
 
-    // Espera al segundo :00 del próximo minuto
     const now = new Date()
     const msToNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds()
 
     const timeout = setTimeout(() => {
-      rotateCurrent(current, uploads)
-
-      // A partir de aquí cada 60 segundos exactos
-      const interval = setInterval(() => {
-        rotateCurrent(current, uploads)
-      }, 60000)
-
+      rotate()
+      const interval = setInterval(rotate, 60000)
       return () => clearInterval(interval)
     }, msToNextMinute)
 
