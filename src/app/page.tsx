@@ -14,6 +14,7 @@ const empty = {top:0,left:0,width:0,height:0}
 
 export default function Home() {
   const [showModal, setShowModal] = useState(false)
+  const [modalMode, setModalMode] = useState<"free"|"reserve">("free")
   const [isMobile, setIsMobile] = useState(false)
   const [screenStyle, setScreenStyle] = useState<BoxStyle>(empty)
   const [amzStyle, setAmzStyle] = useState<BoxStyle>(empty)
@@ -67,7 +68,7 @@ export default function Home() {
         </div>
 
         <div style={{display:'flex',flexDirection:'column',gap:'12px'}}>
-          <button onClick={() => setShowModal(true)} style={{background:'#C9A84C',color:'#080808',padding:'16px',fontSize:'12px',fontWeight:900,letterSpacing:'3px',border:'none',cursor:'pointer'}}>GET ON THE SCREEN</button>
+          <button onClick={() => { setModalMode("free"); setShowModal(true) }} style={{background:'#C9A84C',color:'#080808',padding:'16px',fontSize:'12px',fontWeight:900,letterSpacing:'3px',border:'none',cursor:'pointer'}}>GET ON THE SCREEN</button>
           <button style={{background:'transparent',color:'#C9A84C',padding:'14px',fontSize:'11px',fontWeight:900,letterSpacing:'2px',border:'1px solid #C9A84C',cursor:'pointer'}}>RESERVE YOUR SLOT</button>
         </div>
 
@@ -76,7 +77,7 @@ export default function Home() {
         </div>
       </div>
 
-      {showModal && <UploadModal onClose={() => setShowModal(false)}/>}
+      {showModal && <UploadModal onClose={() => setShowModal(false)} mode={modalMode}/>}
     </main>
   )
 
@@ -106,12 +107,12 @@ export default function Home() {
         </div>
 
         <div style={{display:'flex',flexDirection:'row',gap:'12px',alignItems:'center'}}>
-          <button onClick={() => setShowModal(true)} style={{background:'#C9A84C',color:'#080808',padding:'14px 32px',fontSize:'11px',fontWeight:900,letterSpacing:'3px',border:'none',cursor:'pointer',whiteSpace:'nowrap'}}>GET ON THE SCREEN</button>
+          <button onClick={() => { setModalMode("free"); setShowModal(true) }} style={{background:'#C9A84C',color:'#080808',padding:'14px 32px',fontSize:'11px',fontWeight:900,letterSpacing:'3px',border:'none',cursor:'pointer',whiteSpace:'nowrap'}}>GET ON THE SCREEN</button>
           <button style={{background:'transparent',color:'#C9A84C',padding:'13px 24px',fontSize:'10px',fontWeight:900,letterSpacing:'2px',border:'0.5px solid #C9A84C',cursor:'pointer',whiteSpace:'nowrap'}}>RESERVE YOUR SLOT</button>
         </div>
       </div>
 
-      {showModal && <UploadModal onClose={() => setShowModal(false)}/>}
+      {showModal && <UploadModal onClose={() => setShowModal(false)} mode={modalMode}/>}
 
     </main>
   )
