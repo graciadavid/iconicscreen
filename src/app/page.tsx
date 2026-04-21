@@ -87,7 +87,7 @@ export default function Home() {
           Your face. <span style={{color:'#C9A84C'}}>The internet&apos;s billboard.</span>
         </div>
         <div style={{display:'flex',alignItems:'center',gap:'20px'}}>
-          <div style={{transform:"scale(0.75)",transformOrigin:"left center"}}><LiveCounter/></div>
+          <LiveCounter small/>
           <div style={{display:'flex',gap:'10px'}}>
             <button onClick={() => { setModalMode('free'); setShowModal(true) }}
               style={{background:'#C9A84C',color:'#080808',padding:'10px 20px',fontSize:'10px',fontWeight:900,letterSpacing:'2px',border:'none',cursor:'pointer',whiteSpace:'nowrap'}}>
