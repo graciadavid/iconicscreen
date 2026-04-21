@@ -102,34 +102,26 @@ export default function Home() {
           style={{position:'fixed',top:amzStyle.top,left:amzStyle.left,width:amzStyle.width,height:amzStyle.height,zIndex:3,display:'flex',alignItems:'flex-end',justifyContent:'center',cursor:'pointer',paddingBottom:'4%'}}
         >
           <div style={{textAlign:'center'}}>
-            <div style={{fontSize:'clamp(10px,1.5vw,18px)',fontWeight:900,color:'#FF9900',animation:'pulse 1.5s ease-in-out infinite',letterSpacing:'3px'}}>TODAY&apos;S DEALS</div>
-            <div style={{fontSize:'clamp(8px,1vw,12px)',color:'#ffffff',letterSpacing:'2px',marginTop:'16px'}}>CLICK TO SHOP</div>
+            <div style={{fontSize:'clamp(10px,1.5vw,18px)',fontWeight:900,color:'#FF9900',letterSpacing:'3px',animation:'pulse 1.5s ease-in-out infinite'}}>TODAY&apos;S DEALS</div>
+            <div style={{fontSize:'clamp(8px,1vw,12px)',color:'#ffffff',letterSpacing:'2px',marginTop:'8px'}}>CLICK TO SHOP</div>
           </div>
         </div>
       )}
 
-      <nav style={{position:'relative',zIndex:4,display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 32px',background:'linear-gradient(to bottom,rgba(0,0,0,0.6),transparent)'}}>
+      {/* NAV — solo logo */}
+      <nav style={{position:'relative',zIndex:4,display:'flex',justifyContent:'flex-start',alignItems:'center',padding:'12px 32px',background:'linear-gradient(to bottom,rgba(0,0,0,0.6),transparent)'}}>
         <Image src="/logo.png" alt="Iconic Screen" width={isMobile?100:140} height={isMobile?38:52} style={{objectFit:'contain'}}/>
-        {!isMobile && (
-          <div style={{display:'flex',gap:'28px'}}>
-            <span style={{fontSize:'10px',letterSpacing:'2px',color:'rgba(255,255,255,0.5)',cursor:'pointer'}}>HOW IT WORKS</span>
-            <span style={{fontSize:'10px',letterSpacing:'2px',color:'rgba(255,255,255,0.5)',cursor:'pointer'}}>PRICING</span>
-            <span style={{fontSize:'10px',letterSpacing:'2px',color:'rgba(255,255,255,0.5)',cursor:'pointer'}}>LIVE</span>
-          </div>
-        )}
-        <button onClick={() => setShowModal(true)} style={{background:'#C9A84C',color:'#080808',padding:'9px 22px',fontSize:'10px',fontWeight:900,letterSpacing:'2px',border:'none',cursor:'pointer'}}>GET ON SCREEN</button>
       </nav>
 
-      <div style={{position:'fixed',bottom:0,left:0,right:0,zIndex:4,padding:isMobile?'16px 20px 24px':'20px 32px 32px',display:'flex',flexDirection:isMobile?'column':'row',justifyContent:'space-between',alignItems:isMobile?'stretch':'flex-end',gap:isMobile?'12px':'0',background:'linear-gradient(to top,rgba(0,0,0,0.95) 60%,transparent)'}}>
+      {/* COPY + CTA */}
+      <div style={{position:'fixed',bottom:0,left:0,right:0,zIndex:4,padding:isMobile?'16px 20px 24px':'20px 32px 32px',display:'flex',justifyContent:'space-between',alignItems:'flex-end',background:'linear-gradient(to top,rgba(0,0,0,0.95) 60%,transparent)'}}>
         <div>
           <div style={{fontSize:'9px',letterSpacing:'4px',color:'#C9A84C',marginBottom:'6px'}}>THE WORLD&apos;S SCREEN</div>
-          <div style={{fontSize:isMobile?'22px':'clamp(18px,2.5vw,32px)',fontWeight:900,color:'#fff',lineHeight:1.1,letterSpacing:'1px',marginBottom:'6px'}}>Your face.<br/><span style={{color:'#C9A84C'}}>The internet&apos;s billboard.</span></div>
-          {!isMobile && <div style={{fontSize:'12px',color:'rgba(255,255,255,0.5)',fontFamily:'Arial',fontWeight:400,lineHeight:1.6,maxWidth:'420px'}}>Upload your image or video. Appear where Nike and Apple advertise. Free forever — or reserve your exact moment.</div>}
+          <div style={{fontSize:isMobile?'22px':'clamp(18px,2.5vw,32px)',fontWeight:900,color:'#fff',lineHeight:1.1,letterSpacing:'1px'}}>Your face.<br/><span style={{color:'#C9A84C'}}>The internet&apos;s billboard.</span></div>
         </div>
-        <div style={{display:'flex',flexDirection:'column',gap:'8px',alignItems:isMobile?'stretch':'flex-end',marginLeft:isMobile?'0':'32px'}}>
+        <div style={{display:'flex',flexDirection:'row',gap:'12px',alignItems:'center',marginLeft:'32px'}}>
           <button onClick={() => setShowModal(true)} style={{background:'#C9A84C',color:'#080808',padding:'14px 32px',fontSize:'11px',fontWeight:900,letterSpacing:'3px',border:'none',cursor:'pointer',whiteSpace:'nowrap'}}>GET ON THE SCREEN</button>
           <button style={{background:'transparent',color:'#C9A84C',padding:'13px 24px',fontSize:'10px',fontWeight:900,letterSpacing:'2px',border:'0.5px solid #C9A84C',cursor:'pointer',whiteSpace:'nowrap'}}>RESERVE YOUR SLOT</button>
-          <div style={{fontSize:'10px',color:'rgba(255,255,255,0.25)',fontFamily:'Arial',letterSpacing:'1px',textAlign:isMobile?'center':'right'}}>Free to upload · $9 per hour slot</div>
         </div>
       </div>
 
