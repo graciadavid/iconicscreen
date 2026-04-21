@@ -44,7 +44,7 @@ export default function Home() {
     <main style={{width:'100vw',height:'100vh',overflow:'hidden',position:'relative',fontFamily:'"Arial Black",Arial,sans-serif'}}>
 
       <img ref={imgRef} src="/hero.png" alt="Iconic Screen" onLoad={calcScreen}
-        style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:isMobile?'cover':'fill',objectPosition:'center top',zIndex:0}}/>
+        style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'fill',objectPosition:'center top',zIndex:0}}/>
 
       <Screen style={screenStyle} isMobile={isMobile}/>
       {!isMobile && <AmazonPanel style={amzStyle}/>}
