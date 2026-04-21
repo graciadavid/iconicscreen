@@ -99,7 +99,7 @@ export default function Home() {
       {!isMobile && amzStyle.width > 0 && (
         <div
           onClick={() => window.open('https://www.amazon.com/deals?tag=nys0b-20', '_blank')}
-          style={{position:'fixed',top:amzStyle.top,left:amzStyle.left,width:amzStyle.width,height:amzStyle.height,zIndex:3,display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer'}}
+          style={{position:'fixed',top:amzStyle.top,left:amzStyle.left,width:amzStyle.width,height:amzStyle.height,zIndex:3,display:'flex',alignItems:'flex-end',justifyContent:'center',cursor:'pointer',paddingBottom:'12%'}}
         >
           <div style={{textAlign:'center'}}>
             <div style={{fontSize:'clamp(10px,1.5vw,18px)',fontWeight:900,color:'#FF9900',letterSpacing:'3px'}}>TODAY&apos;S DEALS</div>
